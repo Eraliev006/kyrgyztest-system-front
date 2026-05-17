@@ -6,6 +6,13 @@ import CandidatesView from '../views/CandidatesView.vue'
 import QuestionsView from '../views/QuestionsView.vue'
 import VariantsView from '../views/VariantsView.vue'
 import VariantDetailView from '../views/VariantDetailView.vue'
+import ResultsView from '../views/ResultsView.vue'
+import StatsView from '../views/StatsView.vue'
+import OrganizationsView from '../views/OrganizationsView.vue'
+import UsersView from '../views/UsersView.vue'
+import SettingsView from '../views/SettingsView.vue'
+import TopicsView from '../views/TopicsView.vue'
+import AuditView from '../views/AuditView.vue'
 
 
 const router = createRouter({
@@ -36,6 +43,41 @@ const router = createRouter({
     {
       path: '/admin/variants/:id',
       component: VariantDetailView,
+      meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/results',
+      component: ResultsView,
+      meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/results/stats',
+      component: StatsView,
+      meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/organizations',
+      component: OrganizationsView,
+      meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/users',
+      component: UsersView,
+      meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/settings',
+      component: SettingsView,
+      meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/topics',
+      component: TopicsView,
+      meta: { requiresAuth: true, roles: ['Director', 'Expert', 'SuperAdmin'] }
+    },
+    {
+      path: '/admin/audit',
+      component: AuditView,
       meta: { requiresAuth: true, roles: ['Director', 'SuperAdmin'] }
     }
   ]
