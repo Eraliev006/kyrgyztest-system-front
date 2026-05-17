@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { TokenResponse } from '../types'
+import { useOrganizationsStore } from './organizations'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || '')
@@ -23,6 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('token')
     localStorage.removeItem('fullName')
     localStorage.removeItem('role')
+    useOrganizationsStore().invalidate()
   }
 
   const isAuthenticated = () => !!token.value
