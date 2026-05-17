@@ -2,7 +2,7 @@ import api from './index'
 import type { Candidate, CandidateListResponse, CreateCandidateRequest } from '../types'
 
 export const getAll = () =>
-  api.get<Candidate[]>('/candidates')
+  api.get<{ items: Candidate[]; totalCount: number; page: number; pageSize: number }>('/candidates')
 
 export const listCandidates = (params: {
   organizationId?: string
