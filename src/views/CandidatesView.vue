@@ -207,7 +207,7 @@ import type { Candidate } from '../types'
 import AppSidebar from '../components/AppSidebar.vue'
 
 const candidates = ref<Candidate[]>([])
-const loading = ref(false)
+const loading = ref(true)
 const orgStore = useOrganizationsStore()
 const searchQuery = ref('')
 const selectedOrgId = ref<string | undefined>(undefined)
