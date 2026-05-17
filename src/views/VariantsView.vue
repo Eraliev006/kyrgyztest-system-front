@@ -10,14 +10,17 @@
         <table>
           <thead>
             <tr>
-              <th>Дата генерации</th>
+              <th>№</th>
               <th>Кол-во вопросов</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="v in variants" :key="v.id">
-              <td>{{ formatDate(v.generatedAt) }}</td>
+              <td>
+                {{ v.number }}
+                <span class="date-sub">{{ formatDate(v.generatedAt) }}</span>
+              </td>
               <td>{{ v.questionCount }}</td>
               <td>
                 <button class="btn-open" @click="router.push(`/admin/variants/${v.id}`)">
@@ -124,5 +127,12 @@ td {
   text-align: center;
   color: #94a3b8;
   padding: 40px !important;
+}
+
+.date-sub {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
 }
 </style>
