@@ -60,22 +60,51 @@
         <div class="modal">
           <h3>{{ editingId ? 'Редактировать вопрос' : 'Новый вопрос' }}</h3>
 
-          <div class="form-row">
-            <select v-model="form.section">
-              <option value="0">Грамматика</option>
-              <option value="1">Аудирование</option>
-              <option value="2">Чтение</option>
-              <option value="3">Письмо</option>
-            </select>
-            <select v-model="form.level">
-              <option value="0">A1</option>
-              <option value="1">A2</option>
-              <option value="2">B1</option>
-              <option value="3">B2</option>
-            </select>
+          <div class="pill-row">
+            <button
+              v-for="(label, idx) in ['Грамматика', 'Аудирование', 'Чтение', 'Письмо']"
+              :key="idx"
+              type="button"
+              class="pill"
+              :class="{ active: Number(form.section) === idx }"
+              @click="form.section = idx"
+            >{{ label }}</button>
+          </div>
+          <div class="pill-row">
+            <button
+              v-for="(label, idx) in ['A1', 'A2', 'B1', 'B2']"
+              :key="idx"
+              type="button"
+              class="pill"
+              :class="{ active: Number(form.level) === idx }"
+              @click="form.level = idx"
+            >{{ label }}</button>
           </div>
 
           <textarea v-model="form.content" placeholder="Текст вопроса" rows="3" @input="contentUserEdited = true" />
+
+          <div v-if="Number(form.section) === 0" class="topic-dropdown" :class="{ open: topicDropdownOpen }">
+            <button type="button" class="topic-trigger" @click="topicDropdownOpen = !topicDropdownOpen">
+              <span>{{ selectedTopicLabel() }}</span>
+              <svg class="topic-arrow" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div v-if="topicDropdownOpen" class="topic-list">
+              <button type="button" class="topic-option" :class="{ selected: form.topicId === null }" @click="selectTopic(null)">
+                Без подтемы
+              </button>
+              <button
+                v-for="t in topics"
+                :key="t.id"
+                type="button"
+                class="topic-option"
+                :class="{ selected: form.topicId === t.id }"
+                @click="selectTopic(t.id)"
+              >{{ t.name }}</button>
+              <span v-if="topics.length === 0" class="topic-empty">Нет подтем</span>
+            </div>
+          </div>
 
           <!-- Media Group -->
           <div v-if="form.section == 1 || form.section == 2" class="media-section">
@@ -131,10 +160,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onBeforeUnmount } from 'vue'
 import AppSidebar from '../components/AppSidebar.vue'
 import { getAll, create, update, remove, createMediaGroup } from '../api/questions'
-import type { QuestionResponse, CreateAnswerOptionRequest } from '../types'
+import { getAll as getTopics } from '../api/topics'
+import type { QuestionResponse, CreateAnswerOptionRequest, Topic } from '../types'
 
 import axios from 'axios'
 
@@ -146,7 +176,34 @@ const saving = ref(false)
 const formError = ref('')
 const editingId = ref<string | null>(null)
 const correctIndex = ref(0)
+const topics = ref<Topic[]>([])
+const topicDropdownOpen = ref(false)
 
+function selectedTopicLabel() {
+  if (form.value.topicId === null) return 'Без подтемы'
+  return topics.value.find(t => t.id === form.value.topicId)?.name ?? 'Без подтемы'
+}
+
+function selectTopic(id: string | null) {
+  form.value.topicId = id
+  topicDropdownOpen.value = false
+}
+
+function handleTopicClickOutside(e: MouseEvent) {
+  const el = document.querySelector('.topic-dropdown')
+  if (el && !el.contains(e.target as Node)) {
+    topicDropdownOpen.value = false
+  }
+}
+
+watch(topicDropdownOpen, (open) => {
+  if (open) document.addEventListener('mousedown', handleTopicClickOutside)
+  else document.removeEventListener('mousedown', handleTopicClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleTopicClickOutside)
+})
 
 const form = ref({
   section: 0,
@@ -156,6 +213,7 @@ const form = ref({
   mediaGroupId: undefined as string | undefined,
   mediaUrl: '',
   mediaText: '',
+  topicId: null as string | null,
   answerOptions: [
     { content: '', isCorrect: false, orderIndex: 0 },
     { content: '', isCorrect: false, orderIndex: 1 },
@@ -188,7 +246,23 @@ watch(
   }
 )
 
-onMounted(loadQuestions)
+watch(
+  () => form.value.section,
+  (section) => {
+    form.value.topicId = null
+    loadTopicsForSection(section)
+  }
+)
+
+onMounted(() => {
+  loadQuestions()
+  loadTopicsForSection(form.value.section)
+})
+
+async function loadTopicsForSection(section: number) {
+  const res = await getTopics(String(section))
+  topics.value = res.data
+}
 
 async function loadQuestions() {
   const res = await getAll(
@@ -216,6 +290,7 @@ function openEditForm(q: QuestionResponse) {
     mediaGroupId: q.mediaGroupId,
     mediaUrl: q.mediaUrl || '',
     mediaText: q.mediaText || '',
+    topicId: q.topicId ?? null,
     answerOptions: q.answerOptions.map(a => ({
       content: a.content,
       isCorrect: a.isCorrect,
@@ -223,6 +298,7 @@ function openEditForm(q: QuestionResponse) {
     }))
   }
   correctIndex.value = q.answerOptions.findIndex(a => a.isCorrect)
+  loadTopicsForSection(q.section)
   showForm.value = true
 }
 
@@ -240,6 +316,7 @@ function resetForm() {
     mediaGroupId: undefined,
     mediaUrl: '',
     mediaText: '',
+    topicId: null,
     answerOptions: [
       { content: '', isCorrect: false, orderIndex: 0 },
       { content: '', isCorrect: false, orderIndex: 1 },
@@ -312,6 +389,7 @@ async function submitForm() {
     type: Number(form.value.type),
     content: form.value.content,
     mediaGroupId: form.value.mediaGroupId,
+    topicId: form.value.topicId || null,
     answerOptions: options
   }
 
@@ -552,4 +630,110 @@ textarea {
 }
 
 .error { color: #dc2626; font-size: 13px; }
+
+.pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pill {
+  padding: 6px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 14px;
+  cursor: pointer;
+  width: auto;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.pill:hover:not(.active) {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+}
+.pill.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+.pill-empty {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.topic-dropdown {
+  position: relative;
+  width: 100%;
+}
+.topic-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s;
+}
+.topic-trigger:hover {
+  border-color: #94a3b8;
+}
+.topic-dropdown.open .topic-trigger {
+  border-color: #2563eb;
+}
+.topic-arrow {
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.topic-dropdown.open .topic-arrow {
+  transform: rotate(180deg);
+}
+.topic-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 200;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.topic-option {
+  padding: 8px 10px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.topic-option:hover {
+  background: #f1f5f9;
+}
+.topic-option.selected {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 500;
+}
+.topic-empty {
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #94a3b8;
+}
 </style>
