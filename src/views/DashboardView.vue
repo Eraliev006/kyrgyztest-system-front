@@ -31,9 +31,8 @@ const allowedCandidates = ref(0)
 
 onMounted(async () => {
   const res = await getAll()
-  const candidates: Candidate[] = res.data
-  totalCandidates.value = candidates.length
-  allowedCandidates.value = candidates.filter(c => c.isAllowed).length
+  totalCandidates.value = res.data.totalCount
+  allowedCandidates.value = res.data.items.filter((c: Candidate) => c.isAllowed).length
 })
 
 

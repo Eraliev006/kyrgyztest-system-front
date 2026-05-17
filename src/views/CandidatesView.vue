@@ -151,33 +151,40 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="c in candidates" :key="c.id">
-              <td>{{ c.fullName }}</td>
-              <td>{{ c.inn }}</td>
-              <td class="code">{{ c.accessCode }}</td>
-              <td>
-                <span v-if="c.isAllowed" class="badge-status-green">🟢 Доступ открыт</span>
-                <span v-else-if="c.blockedUntil && new Date(c.blockedUntil) > new Date()" class="badge-status-red">
-                  ⛔ Заблокирован до {{ formatDate(c.blockedUntil) }}
-                </span>
-                <span v-else class="badge-status-gray">⚪ Нет доступа</span>
-              </td>
-              <td class="actions-cell">
-                <div class="dropdown" @click.stop>
-                  <button class="btn-dots" @click="toggleMenu(c.id, $event)">⋯</button>
-                  <div v-if="openMenuId === c.id" class="dropdown-menu" :style="{ top: menuPos.top + 'px', left: menuPos.left + 'px' }">
-                    <button class="dropdown-item" @click="openEditModal(c); openMenuId = null">Редактировать</button>
-                    <button v-if="!c.isAllowed" class="dropdown-item" @click="askAllowAccess(c.id); openMenuId = null">Открыть доступ</button>
-                    <button v-if="c.isAllowed" class="dropdown-item" @click="denyAccess(c.id); openMenuId = null">Закрыть доступ</button>
-                    <button class="dropdown-item" @click="openBlockModal(c.id); openMenuId = null">Заблокировать</button>
-                    <button class="dropdown-item dropdown-item-delete" @click="askDeleteCandidate(c.id); openMenuId = null">Удалить</button>
+            <template v-if="loading">
+              <tr v-for="i in 5" :key="'sk-' + i" class="skeleton-row">
+                <td v-for="j in 5" :key="j"><div class="skeleton-cell"></div></td>
+              </tr>
+            </template>
+            <template v-else>
+              <tr v-for="c in candidates" :key="c.id" class="fade-in">
+                <td>{{ c.fullName }}</td>
+                <td>{{ c.inn }}</td>
+                <td class="code">{{ c.accessCode }}</td>
+                <td>
+                  <span v-if="c.isAllowed" class="badge-status-green">🟢 Доступ открыт</span>
+                  <span v-else-if="c.blockedUntil && new Date(c.blockedUntil) > new Date()" class="badge-status-red">
+                    ⛔ Заблокирован до {{ formatDate(c.blockedUntil) }}
+                  </span>
+                  <span v-else class="badge-status-gray">⚪ Нет доступа</span>
+                </td>
+                <td class="actions-cell">
+                  <div class="dropdown" @click.stop>
+                    <button class="btn-dots" @click="toggleMenu(c.id, $event)">⋯</button>
+                    <div v-if="openMenuId === c.id" class="dropdown-menu" :style="{ top: menuPos.top + 'px', left: menuPos.left + 'px' }">
+                      <button class="dropdown-item" @click="openEditModal(c); openMenuId = null">Редактировать</button>
+                      <button v-if="!c.isAllowed" class="dropdown-item" @click="askAllowAccess(c.id); openMenuId = null">Открыть доступ</button>
+                      <button v-if="c.isAllowed" class="dropdown-item" @click="denyAccess(c.id); openMenuId = null">Закрыть доступ</button>
+                      <button class="dropdown-item" @click="openBlockModal(c.id); openMenuId = null">Заблокировать</button>
+                      <button class="dropdown-item dropdown-item-delete" @click="askDeleteCandidate(c.id); openMenuId = null">Удалить</button>
+                    </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-            <tr v-if="candidates.length === 0">
-              <td colspan="5" class="empty">{{ isSearchMode ? 'Кандидат не найден' : 'Сегодня кандидатов не добавляли' }}</td>
-            </tr>
+                </td>
+              </tr>
+              <tr v-if="candidates.length === 0" class="fade-in">
+                <td colspan="5" class="empty">{{ isSearchMode ? 'Кандидат не найден' : 'Сегодня кандидатов не добавляли' }}</td>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>
@@ -200,6 +207,7 @@ import type { Candidate } from '../types'
 import AppSidebar from '../components/AppSidebar.vue'
 
 const candidates = ref<Candidate[]>([])
+const loading = ref(false)
 const orgStore = useOrganizationsStore()
 const searchQuery = ref('')
 const selectedOrgId = ref<string | undefined>(undefined)
@@ -400,6 +408,7 @@ function getTodayRange() {
 }
 
 async function loadList() {
+  loading.value = true
   const { dateFrom, dateTo } = getTodayRange()
   try {
     const res = await listCandidates({
@@ -414,6 +423,8 @@ async function loadList() {
   } catch {
     candidates.value = []
     total.value = 0
+  } finally {
+    loading.value = false
   }
   isSearchMode.value = false
 }
@@ -988,5 +999,26 @@ td {
   font-weight: 700;
   color: #2563eb;
   letter-spacing: 2px;
+}
+
+.skeleton-cell {
+  height: 16px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>
