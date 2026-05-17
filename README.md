@@ -1,5 +1,60 @@
-# Vue 3 + TypeScript + Vite
+# KyrgyzTest — Frontend
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Веб-интерфейс платформы для проведения тестирования. Администраторы управляют вопросами, вариантами и кандидатами; кандидаты проходят экзамены в браузере.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Стек
+
+- **Vue 3** (Composition API)
+- **Vite** — сборка и dev-сервер
+- **TypeScript**
+- **Pinia** — управление состоянием
+- **Vue Router**
+- **Axios** — HTTP-клиент
+
+## Запуск локально
+
+```bash
+npm install
+npm run dev
+```
+
+Приложение откроется на `http://localhost:5173`.
+
+Для production-сборки:
+
+```bash
+npm run build
+```
+
+## Переменные окружения
+
+Создайте файл `.env` в корне проекта:
+
+```
+VITE_API_URL=http://localhost:8000
+```
+
+| Переменная     | Описание               |
+| -------------- | ---------------------- |
+| `VITE_API_URL` | Базовый URL бэкенд API |
+
+## Структура `src/`
+
+```
+src/
+├── api/           # Модули Axios для каждого ресурса (auth, exam, users …)
+├── assets/        # Статика (иконки, изображения)
+├── components/    # Переиспользуемые компоненты и боковая панель
+├── router/        # Маршруты Vue Router
+├── stores/        # Pinia-сторы (auth, exam, organizations …)
+├── types/         # TypeScript-типы и интерфейсы
+├── views/         # Страницы приложения (одна view = один маршрут)
+├── App.vue
+├── main.ts
+└── style.css
+```
+
+## Роли
+
+- **Администратор** — управление организациями, кандидатами, вопросами, вариантами, результатами
+- **Кандидат** — прохождение экзамена с верификацией личности
