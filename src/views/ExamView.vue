@@ -37,6 +37,18 @@
     </div>
   </div>
 
+  <!-- Step 2.5: Photo verification -->
+  <div v-else-if="step === 2.5" class="exam-wrapper">
+    <div class="exam-card photo-check-card">
+      <h2>Проверьте личность кандидата</h2>
+      <img :src="candidatePhoto" class="candidate-photo" />
+      <p class="candidate-check-name">{{ candidate?.fullName }}</p>
+      <button @click="confirmIdentity" :disabled="loading">
+        {{ loading ? 'Загрузка...' : 'Подтвердить и начать тест' }}
+      </button>
+    </div>
+  </div>
+
   <!-- Step 3: Exam -->
   <template v-else key="exam">
 
@@ -137,6 +149,7 @@ const error = ref('')
 const loading = ref(false)
 const sectionLoading = ref(false)
 const candidate = ref<Candidate | null>(null)
+const candidatePhoto = ref('')
 
 const activeSectionMeta = computed(() =>
   store.sectionMeta.find(m => m.section === store.activeSection)
@@ -169,12 +182,29 @@ async function examLogin() {
   try {
     const res = await examLoginApi(accessCode.value)
     candidate.value = res.data
-    await store.start(res.data.id)
-    step.value = 3
+    if (res.data.photo) {
+      candidatePhoto.value = res.data.photo
+      step.value = 2.5
+    } else {
+      await store.start(res.data.id)
+      step.value = 3
+    }
   } catch (e: any) {
     if (e.response?.status === 404) error.value = 'Кандидат не найден'
-    else if (e.response?.status === 403) error.value = 'Доступ закрыт'
+    else if (e.response?.status === 403) {
+      error.value = e.response?.data?.message || e.response?.data || 'Доступ закрыт'
+    }
     else error.value = 'Ошибка входа'
+  } finally {
+    loading.value = false
+  }
+}
+
+async function confirmIdentity() {
+  loading.value = true
+  try {
+    await store.start(candidate.value!.id)
+    step.value = 3
   } finally {
     loading.value = false
   }
@@ -355,5 +385,28 @@ button:disabled {
   width: 100%;
   margin: 0 auto;
   padding: 40px 24px;
+}
+
+.photo-check-card {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.candidate-photo {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+}
+
+.candidate-check-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
 }
 </style>
