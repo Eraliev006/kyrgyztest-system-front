@@ -1,3 +1,31 @@
+import { useLocation, useNavigate } from 'react-router-dom'
+import { languageLevelLabels } from '@/shared/constants/question-labels'
+import type { Result } from '@/entities/result'
+import { clearAttemptSession } from '@/shared/lib/attempt-session'
+import { Button } from '@/shared/ui/button'
+
 export default function ExamFinishPage() {
-  return <h1 className="text-2xl font-semibold">Тест завершён</h1>
+  const location = useLocation()
+  const navigate = useNavigate()
+  const result = (location.state as { result?: Result } | null)?.result
+
+  function next() {
+    clearAttemptSession()
+    navigate('/exam/login', { replace: true })
+  }
+
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6">
+      <h1 className="text-2xl font-semibold">Тест завершён</h1>
+      {result ? (
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-4xl font-semibold">{languageLevelLabels[result.level!]}</p>
+          <p className="text-muted-foreground">Итоговый балл: {result.totalScore}</p>
+        </div>
+      ) : (
+        <p className="text-muted-foreground">Результат отправлен. Обратитесь к администратору.</p>
+      )}
+      <Button onClick={next}>Готово</Button>
+    </div>
+  )
 }

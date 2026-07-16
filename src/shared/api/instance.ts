@@ -45,9 +45,15 @@ export async function apiInstance<T extends { data: unknown; status: number; hea
     : await response.text().catch(() => null)
 
   if (!response.ok) {
+    // Most errors go through ErrorHandlingMiddleware as { statusCode, message },
+    // but a few actions (e.g. ExamController's Login/Unlock) return NotFound("..."),
+    // Unauthorized("..."), StatusCode(403, "...") directly — ASP.NET Core serializes
+    // those as a bare JSON string, not an object.
     const message =
-      (body && typeof body === 'object' && 'message' in body && String(body.message)) ||
-      response.statusText
+      typeof body === 'string'
+        ? body
+        : (body && typeof body === 'object' && 'message' in body && String(body.message)) ||
+          response.statusText
     throw new ApiError(response.status, message, body)
   }
 
