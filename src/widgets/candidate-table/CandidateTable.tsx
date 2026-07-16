@@ -9,6 +9,7 @@ import { CandidateAccessActions } from '@/features/candidate-block-toggle/Candid
 import { Button } from '@/shared/ui/button'
 import { Badge } from '@/shared/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
+import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select'
 
 const ALL_ORGANIZATIONS = 'all'
@@ -85,11 +86,7 @@ export function CandidateTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && (
-            <TableRow>
-              <TableCell colSpan={6}>Загрузка...</TableCell>
-            </TableRow>
-          )}
+          {isLoading && <TableSkeletonRows columns={6} />}
           {!isLoading && candidates.length === 0 && (
             <TableRow>
               <TableCell colSpan={6}>Кандидатов пока нет</TableCell>

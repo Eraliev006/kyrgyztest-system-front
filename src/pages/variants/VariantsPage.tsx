@@ -8,6 +8,7 @@ import { SectionConfigForm } from '@/features/section-config-crud/SectionConfigF
 import { DeleteSectionConfigDialog } from '@/features/section-config-crud/DeleteSectionConfigDialog'
 import { Button } from '@/shared/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
+import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 
 export default function VariantsPage() {
   const { data: variantsResponse, isLoading: variantsLoading } = useGetApiVariants()
@@ -38,11 +39,7 @@ export default function VariantsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {variantsLoading && (
-              <TableRow>
-                <TableCell colSpan={4}>Загрузка...</TableCell>
-              </TableRow>
-            )}
+            {variantsLoading && <TableSkeletonRows columns={4} />}
             {!variantsLoading && variants.length === 0 && (
               <TableRow>
                 <TableCell colSpan={4}>Вариантов пока нет</TableCell>
@@ -98,11 +95,7 @@ export default function VariantsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {configsLoading && (
-              <TableRow>
-                <TableCell colSpan={7}>Загрузка...</TableCell>
-              </TableRow>
-            )}
+            {configsLoading && <TableSkeletonRows columns={7} />}
             {!configsLoading && configs.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7}>Конфигураций пока нет</TableCell>

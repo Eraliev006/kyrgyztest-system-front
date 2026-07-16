@@ -11,6 +11,7 @@ import type { VariantQuestion } from '@/entities/variant'
 import { ApiError } from '@/shared/api/instance'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 import { Button } from '@/shared/ui/button'
+import { Skeleton } from '@/shared/ui/skeleton'
 
 interface ReplaceQuestionDialogProps {
   open: boolean
@@ -67,7 +68,7 @@ export function ReplaceQuestionDialog({
         </DialogHeader>
         <p className="text-sm text-muted-foreground">Текущий: {question.content}</p>
         <div className="flex flex-col gap-1">
-          {isLoading && <p className="text-sm text-muted-foreground">Загрузка...</p>}
+          {isLoading && [0, 1, 2].map((i) => <Skeleton key={i} className="h-9 w-full" />)}
           {!isLoading && candidates.length === 0 && (
             <p className="text-sm text-muted-foreground">Нет доступных вопросов для замены</p>
           )}

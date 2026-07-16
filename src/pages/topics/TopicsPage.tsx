@@ -7,6 +7,7 @@ import { TopicForm } from '@/features/topic-crud/TopicForm'
 import { DeleteTopicDialog } from '@/features/topic-crud/DeleteTopicDialog'
 import { Button } from '@/shared/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
+import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select'
 
 const ALL_SECTIONS = 'all'
@@ -62,11 +63,7 @@ export default function TopicsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && (
-            <TableRow>
-              <TableCell colSpan={3}>Загрузка...</TableCell>
-            </TableRow>
-          )}
+          {isLoading && <TableSkeletonRows columns={3} />}
           {!isLoading && topics.length === 0 && (
             <TableRow>
               <TableCell colSpan={3}>Тем пока нет</TableCell>

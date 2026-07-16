@@ -8,6 +8,7 @@ import { QuestionForm } from '@/features/question-crud/QuestionForm'
 import { DeleteQuestionDialog } from '@/features/question-crud/DeleteQuestionDialog'
 import { Button } from '@/shared/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
+import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select'
 
 const ALL = 'all'
@@ -82,11 +83,7 @@ export default function QuestionsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && (
-            <TableRow>
-              <TableCell colSpan={5}>Загрузка...</TableCell>
-            </TableRow>
-          )}
+          {isLoading && <TableSkeletonRows columns={5} />}
           {!isLoading && questions.length === 0 && (
             <TableRow>
               <TableCell colSpan={5}>Вопросов пока нет</TableCell>

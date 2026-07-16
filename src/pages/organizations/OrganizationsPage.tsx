@@ -5,6 +5,7 @@ import { OrganizationForm } from '@/features/organization-crud/OrganizationForm'
 import { DeleteOrganizationDialog } from '@/features/organization-crud/DeleteOrganizationDialog'
 import { Button } from '@/shared/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
+import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 
 export default function OrganizationsPage() {
   const { data: response, isLoading } = useGetApiOrganizations()
@@ -41,11 +42,7 @@ export default function OrganizationsPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && (
-            <TableRow>
-              <TableCell colSpan={4}>Загрузка...</TableCell>
-            </TableRow>
-          )}
+          {isLoading && <TableSkeletonRows columns={4} />}
           {!isLoading && organizations.length === 0 && (
             <TableRow>
               <TableCell colSpan={4}>Организаций пока нет</TableCell>
