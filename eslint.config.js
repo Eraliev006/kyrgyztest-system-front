@@ -75,7 +75,7 @@ export default tseslint.config(
             },
             {
               from: { element: { types: 'widgets' } },
-              allow: { to: { element: { types: { anyOf: ['entities', 'shared'] } } } },
+              allow: { to: { element: { types: { anyOf: ['features', 'entities', 'shared'] } } } },
             },
             {
               from: { element: { types: 'widgets' } },

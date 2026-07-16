@@ -14,13 +14,19 @@ export class ApiError extends Error {
 }
 
 /**
- * Orval custom mutator (httpClient: 'fetch'). Orval already bakes query
- * params into `path` via its per-endpoint `getXUrl(params)` helpers, so this
- * only needs to resolve against the API base and attach the admin JWT.
+ * Orval custom mutator (httpClient: 'fetch'). Orval bakes query params into
+ * `path` via its per-endpoint `getXUrl(params)` helpers, and — because a
+ * custom mutator is configured — types every generated call site as
+ * `Promise<{ data, status, headers }>`, not the bare body. The generated
+ * code (e.g. reading `response.data`) depends on this exact shape, so this
+ * must return the wrapper, not just the parsed JSON.
  * Only admin/examiner calls carry a JWT — /exam/** has no backend auth by
  * design (access-code flow only), so exam calls simply omit the header.
  */
-export async function apiInstance<T>(path: string, options?: RequestInit): Promise<T> {
+export async function apiInstance<T extends { data: unknown; status: number; headers: Headers }>(
+  path: string,
+  options?: RequestInit,
+): Promise<T> {
   const token = getAdminToken()
   const url = new URL(path.replace(/^\//, ''), env.apiBaseUrl.replace(/\/?$/, '/'))
 
@@ -45,5 +51,5 @@ export async function apiInstance<T>(path: string, options?: RequestInit): Promi
     throw new ApiError(response.status, message, body)
   }
 
-  return body as T
+  return { data: body, status: response.status, headers: response.headers } as T
 }
