@@ -1,0 +1,4 @@
+dist
+node_modules
+src/shared/ui
+src/shared/api/generated
