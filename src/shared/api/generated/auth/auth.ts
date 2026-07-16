@@ -15,20 +15,33 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  LoginDto
+  LoginDto,
+  LoginResponseDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
-export type postApiAuthLoginResponse200 = {
-  data: void
+
+export type postApiAuthLoginResponse200TextPlain = {
+  data: LoginResponseDto
   status: 200
 }
 
-export type postApiAuthLoginResponseSuccess = (postApiAuthLoginResponse200) & {
+export type postApiAuthLoginResponse200ApplicationJson = {
+  data: LoginResponseDto
+  status: 200
+}
+
+export type postApiAuthLoginResponse200TextJson = {
+  data: LoginResponseDto
+  status: 200
+}
+
+export type postApiAuthLoginResponseSuccess = (postApiAuthLoginResponse200TextPlain | postApiAuthLoginResponse200ApplicationJson | postApiAuthLoginResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -59,15 +72,15 @@ export const postApiAuthLogin = async (loginDto?: LoginDto, options?: RequestIni
 
 
 export const getPostApiAuthLoginMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data?: LoginDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data?: LoginDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data?: LoginDto}, TContext> => {
 
 const mutationKey = ['postApiAuthLogin'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -75,7 +88,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiAuthLogin>>, {data?: LoginDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiAuthLogin(data,)
+          return  postApiAuthLogin(data,requestOptions)
         }
 
 
@@ -90,7 +103,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiAuthLoginMutationError = unknown
 
     export const usePostApiAuthLogin = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data?: LoginDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiAuthLogin>>, TError,{data?: LoginDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiAuthLogin>>,
         TError,

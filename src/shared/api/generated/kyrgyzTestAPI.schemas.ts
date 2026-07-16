@@ -4,10 +4,112 @@
  * KyrgyzTest.API
  * OpenAPI spec version: 1.0
  */
+export interface AnswerOptionResponseDto {
+  id?: string;
+  /** @nullable */
+  content?: string | null;
+  isCorrect?: boolean;
+  orderIndex?: number;
+}
+
+export type SectionType = typeof SectionType[keyof typeof SectionType];
+
+
+export const SectionType = {
+  Grammar: 'Grammar',
+  Listening: 'Listening',
+  Reading: 'Reading',
+  Writing: 'Writing',
+  Speaking: 'Speaking',
+} as const;
+
+export type LanguageLevel = typeof LanguageLevel[keyof typeof LanguageLevel];
+
+
+export const LanguageLevel = {
+  A1: 'A1',
+  A2: 'A2',
+  B1: 'B1',
+  B2: 'B2',
+} as const;
+
+export type QuestionType = typeof QuestionType[keyof typeof QuestionType];
+
+
+export const QuestionType = {
+  MCQ: 'MCQ',
+  WordOrder: 'WordOrder',
+  SentenceOrder: 'SentenceOrder',
+} as const;
+
+export interface AttemptAnswerDetailDto {
+  questionId?: string;
+  /** @nullable */
+  content?: string | null;
+  section?: SectionType;
+  level?: LanguageLevel;
+  type?: QuestionType;
+  /** @nullable */
+  selectedOptionId?: string | null;
+  /** @nullable */
+  orderedAnswer?: string | null;
+  isCorrect?: boolean;
+  /** @nullable */
+  correctOptionId?: string | null;
+  /** @nullable */
+  correctOrder?: string[] | null;
+}
+
+export interface AttemptDetailDto {
+  attemptId?: string;
+  candidateId?: string;
+  /** @nullable */
+  answers?: AttemptAnswerDetailDto[] | null;
+}
+
+export interface AuditLogResponseDto {
+  id?: string;
+  /** @nullable */
+  userName?: string | null;
+  /** @nullable */
+  action?: string | null;
+  /** @nullable */
+  entityType?: string | null;
+  /** @nullable */
+  description?: string | null;
+  createdAt?: string;
+}
+
 export interface BlockCandidateDto {
   value?: number;
   /** @nullable */
   unit?: string | null;
+}
+
+export interface CandidateResponseDto {
+  id?: string;
+  /** @nullable */
+  fullName?: string | null;
+  /** @nullable */
+  inn?: string | null;
+  /** @nullable */
+  accessCode?: string | null;
+  isAllowed?: boolean;
+  createdAt?: string;
+  /** @nullable */
+  organizationId?: string | null;
+  /** @nullable */
+  photo?: string | null;
+  /** @nullable */
+  blockedUntil?: string | null;
+}
+
+export interface CandidateResponseDtoPagedResultDto {
+  /** @nullable */
+  items?: CandidateResponseDto[] | null;
+  totalCount?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface CreateAnswerOptionDto {
@@ -48,36 +150,6 @@ export interface CreateOrganizationDto {
   /** @nullable */
   shortName?: string | null;
 }
-
-export type SectionType = typeof SectionType[keyof typeof SectionType];
-
-
-export const SectionType = {
-  Grammar: 'Grammar',
-  Listening: 'Listening',
-  Reading: 'Reading',
-  Writing: 'Writing',
-  Speaking: 'Speaking',
-} as const;
-
-export type LanguageLevel = typeof LanguageLevel[keyof typeof LanguageLevel];
-
-
-export const LanguageLevel = {
-  A1: 'A1',
-  A2: 'A2',
-  B1: 'B1',
-  B2: 'B2',
-} as const;
-
-export type QuestionType = typeof QuestionType[keyof typeof QuestionType];
-
-
-export const QuestionType = {
-  MCQ: 'MCQ',
-  WordOrder: 'WordOrder',
-  SentenceOrder: 'SentenceOrder',
-} as const;
 
 export interface CreateQuestionDto {
   section?: SectionType;
@@ -129,9 +201,32 @@ export interface CreateUserDto {
   role?: UserRole;
 }
 
+export interface ExamAnswerOptionDto {
+  id?: string;
+  /** @nullable */
+  content?: string | null;
+}
+
 export interface ExamLoginDto {
   /** @nullable */
   accessCode?: string | null;
+}
+
+export interface ExamQuestionDto {
+  id?: string;
+  /** @nullable */
+  content?: string | null;
+  type?: QuestionType;
+  /** @nullable */
+  answerOptions?: ExamAnswerOptionDto[] | null;
+}
+
+export interface ExamSectionDto {
+  section?: SectionType;
+  timeLimitMinutes?: number;
+  isCompleted?: boolean;
+  /** @nullable */
+  questions?: ExamQuestionDto[] | null;
 }
 
 export interface LoginDto {
@@ -141,8 +236,118 @@ export interface LoginDto {
   password?: string | null;
 }
 
+export interface LoginResponseDto {
+  /** @nullable */
+  accessToken?: string | null;
+  /** @nullable */
+  fullName?: string | null;
+  /** @nullable */
+  login?: string | null;
+  /** @nullable */
+  role?: string | null;
+}
+
+export interface MediaGroupResponseDto {
+  id?: string;
+  type?: MediaType;
+  /** @nullable */
+  content?: string | null;
+}
+
+/**
+ * @nullable
+ */
+export type OrgStatsDtoByLevel = {[key: string]: number} | null;
+
+export interface OrgStatsDto {
+  totalCount?: number;
+  averageScore?: number;
+  /** @nullable */
+  byLevel?: OrgStatsDtoByLevel;
+}
+
+export interface OrganizationDto {
+  id?: string;
+  /** @nullable */
+  nameRu?: string | null;
+  /** @nullable */
+  nameKg?: string | null;
+  /** @nullable */
+  shortName?: string | null;
+}
+
+export interface ProblemDetails {
+  /** @nullable */
+  type?: string | null;
+  /** @nullable */
+  title?: string | null;
+  /** @nullable */
+  status?: number | null;
+  /** @nullable */
+  detail?: string | null;
+  /** @nullable */
+  instance?: string | null;
+  [key: string]: unknown;
+}
+
+export interface QuestionResponseDto {
+  id?: string;
+  section?: SectionType;
+  level?: LanguageLevel;
+  type?: QuestionType;
+  /** @nullable */
+  content?: string | null;
+  /** @nullable */
+  mediaGroupId?: string | null;
+  /** @nullable */
+  mediaUrl?: string | null;
+  /** @nullable */
+  mediaText?: string | null;
+  /** @nullable */
+  topicId?: string | null;
+  /** @nullable */
+  topicName?: string | null;
+  /** @nullable */
+  answerOptions?: AnswerOptionResponseDto[] | null;
+  createdAt?: string;
+}
+
 export interface ReplaceQuestionDto {
   newQuestionId?: string;
+}
+
+export interface ResultResponseDto {
+  id?: string;
+  attemptId?: string;
+  candidateId?: string;
+  level?: LanguageLevel;
+  grammarScore?: number;
+  listeningScore?: number;
+  readingScore?: number;
+  writingScore?: number;
+  totalScore?: number;
+  createdAt?: string;
+}
+
+export interface ResultWithCandidateDto {
+  id?: string;
+  attemptId?: string;
+  candidateId?: string;
+  /** @nullable */
+  candidateFullName?: string | null;
+  /** @nullable */
+  candidateInn?: string | null;
+  /** @nullable */
+  organizationId?: string | null;
+  /** @nullable */
+  organizationShortName?: string | null;
+  level?: LanguageLevel;
+  grammarScore?: number;
+  listeningScore?: number;
+  readingScore?: number;
+  writingScore?: number;
+  totalScore?: number;
+  createdAt?: string;
 }
 
 export interface SaveAnswerDto {
@@ -154,6 +359,16 @@ export interface SaveAnswerDto {
   orderedAnswer?: string | null;
 }
 
+export interface SectionConfigResponseDto {
+  id?: string;
+  section?: SectionType;
+  timeLimitMinutes?: number;
+  a1Count?: number;
+  a2Count?: number;
+  b1Count?: number;
+  b2Count?: number;
+}
+
 export interface SectionRequestDto {
   attemptId?: string;
   section?: SectionType;
@@ -163,8 +378,57 @@ export interface StartExamRequestDto {
   candidateId?: string;
 }
 
+export interface StartExamResultDto {
+  attemptId?: string;
+  /** @nullable */
+  sections?: ExamSectionDto[] | null;
+}
+
 export interface SubmitExamDto {
   attemptId?: string;
+}
+
+export interface SubmitSectionResultDto {
+  isExamCompleted?: boolean;
+  result?: ResultResponseDto;
+}
+
+export interface VariantQuestionDto {
+  id?: string;
+  /** @nullable */
+  content?: string | null;
+  /** @nullable */
+  section?: string | null;
+  /** @nullable */
+  level?: string | null;
+  /** @nullable */
+  type?: string | null;
+}
+
+/**
+ * @nullable
+ */
+export type TestVariantDetailDtoQuestionsBySection = {[key: string]: VariantQuestionDto[]} | null;
+
+export interface TestVariantDetailDto {
+  id?: string;
+  generatedAt?: string;
+  /** @nullable */
+  questionsBySection?: TestVariantDetailDtoQuestionsBySection;
+}
+
+export interface TestVariantSummaryDto {
+  id?: string;
+  number?: number;
+  generatedAt?: string;
+  questionCount?: number;
+}
+
+export interface TopicDto {
+  id?: string;
+  /** @nullable */
+  name?: string | null;
+  sectionType?: SectionType;
 }
 
 export interface UnlockDto {
@@ -184,6 +448,16 @@ export interface UpdateCandidateDto {
 export interface UploadPhotoDto {
   /** @nullable */
   photo?: string | null;
+}
+
+export interface UserResponseDto {
+  id?: string;
+  /** @nullable */
+  fullName?: string | null;
+  /** @nullable */
+  login?: string | null;
+  role?: UserRole;
+  createdAt?: string;
 }
 
 export type GetApiAuditParams = {

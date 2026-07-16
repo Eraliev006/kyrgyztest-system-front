@@ -21,6 +21,8 @@ import type {
 import { apiInstance } from '../../instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type postApiFilesAudioResponse200 = {
@@ -63,15 +65,15 @@ if(postApiFilesAudioBody?.file !== undefined) {
 
 
 export const getPostApiFilesAudioMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext> => {
 
 const mutationKey = ['postApiFilesAudio'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -79,7 +81,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiFilesAudio>>, {data?: PostApiFilesAudioBody}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiFilesAudio(data,)
+          return  postApiFilesAudio(data,requestOptions)
         }
 
 
@@ -94,7 +96,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiFilesAudioMutationError = unknown
 
     export const usePostApiFilesAudio = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiFilesAudio>>,
         TError,

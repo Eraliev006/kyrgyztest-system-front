@@ -25,11 +25,16 @@ import type {
 
 import type {
   GetApiVariantsIdAvailableQuestionsParams,
-  ReplaceQuestionDto
+  ReplaceQuestionDto,
+  TestVariantDetailDto,
+  TestVariantSummaryDto,
+  VariantQuestionDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -48,12 +53,22 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type getApiVariantsResponse200 = {
-  data: void
+export type getApiVariantsResponse200TextPlain = {
+  data: TestVariantSummaryDto[]
   status: 200
 }
 
-export type getApiVariantsResponseSuccess = (getApiVariantsResponse200) & {
+export type getApiVariantsResponse200ApplicationJson = {
+  data: TestVariantSummaryDto[]
+  status: 200
+}
+
+export type getApiVariantsResponse200TextJson = {
+  data: TestVariantSummaryDto[]
+  status: 200
+}
+
+export type getApiVariantsResponseSuccess = (getApiVariantsResponse200TextPlain | getApiVariantsResponse200ApplicationJson | getApiVariantsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -90,16 +105,16 @@ export const getGetApiVariantsQueryKey = () => {
     }
 
 
-export const getGetApiVariantsQueryOptions = <TData = Awaited<ReturnType<typeof getApiVariants>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariants>>, TError, TData>>, }
+export const getGetApiVariantsQueryOptions = <TData = Awaited<ReturnType<typeof getApiVariants>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariants>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiVariantsQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiVariants>>> = ({ signal }) => getApiVariants({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiVariants>>> = ({ signal }) => getApiVariants({ signal, ...requestOptions });
 
 
 
@@ -119,7 +134,7 @@ export function useGetApiVariants<TData = Awaited<ReturnType<typeof getApiVarian
           TError,
           Awaited<ReturnType<typeof getApiVariants>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiVariants<TData = Awaited<ReturnType<typeof getApiVariants>>, TError = unknown>(
@@ -129,16 +144,16 @@ export function useGetApiVariants<TData = Awaited<ReturnType<typeof getApiVarian
           TError,
           Awaited<ReturnType<typeof getApiVariants>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiVariants<TData = Awaited<ReturnType<typeof getApiVariants>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariants>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariants>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiVariants<TData = Awaited<ReturnType<typeof getApiVariants>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariants>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariants>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -154,12 +169,22 @@ export function useGetApiVariants<TData = Awaited<ReturnType<typeof getApiVarian
 
 
 
-export type getApiVariantsIdResponse200 = {
-  data: void
+export type getApiVariantsIdResponse200TextPlain = {
+  data: TestVariantDetailDto
   status: 200
 }
 
-export type getApiVariantsIdResponseSuccess = (getApiVariantsIdResponse200) & {
+export type getApiVariantsIdResponse200ApplicationJson = {
+  data: TestVariantDetailDto
+  status: 200
+}
+
+export type getApiVariantsIdResponse200TextJson = {
+  data: TestVariantDetailDto
+  status: 200
+}
+
+export type getApiVariantsIdResponseSuccess = (getApiVariantsIdResponse200TextPlain | getApiVariantsIdResponse200ApplicationJson | getApiVariantsIdResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -196,16 +221,16 @@ export const getGetApiVariantsIdQueryKey = (id: string,) => {
     }
 
 
-export const getGetApiVariantsIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiVariantsId>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsId>>, TError, TData>>, }
+export const getGetApiVariantsIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiVariantsId>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiVariantsIdQueryKey(id);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiVariantsId>>> = ({ signal }) => getApiVariantsId(id, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiVariantsId>>> = ({ signal }) => getApiVariantsId(id, { signal, ...requestOptions });
 
 
 
@@ -225,7 +250,7 @@ export function useGetApiVariantsId<TData = Awaited<ReturnType<typeof getApiVari
           TError,
           Awaited<ReturnType<typeof getApiVariantsId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiVariantsId<TData = Awaited<ReturnType<typeof getApiVariantsId>>, TError = unknown>(
@@ -235,16 +260,16 @@ export function useGetApiVariantsId<TData = Awaited<ReturnType<typeof getApiVari
           TError,
           Awaited<ReturnType<typeof getApiVariantsId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiVariantsId<TData = Awaited<ReturnType<typeof getApiVariantsId>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsId>>, TError, TData>>, }
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiVariantsId<TData = Awaited<ReturnType<typeof getApiVariantsId>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsId>>, TError, TData>>, }
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -260,12 +285,22 @@ export function useGetApiVariantsId<TData = Awaited<ReturnType<typeof getApiVari
 
 
 
-export type getApiVariantsIdAvailableQuestionsResponse200 = {
-  data: void
+export type getApiVariantsIdAvailableQuestionsResponse200TextPlain = {
+  data: VariantQuestionDto[]
   status: 200
 }
 
-export type getApiVariantsIdAvailableQuestionsResponseSuccess = (getApiVariantsIdAvailableQuestionsResponse200) & {
+export type getApiVariantsIdAvailableQuestionsResponse200ApplicationJson = {
+  data: VariantQuestionDto[]
+  status: 200
+}
+
+export type getApiVariantsIdAvailableQuestionsResponse200TextJson = {
+  data: VariantQuestionDto[]
+  status: 200
+}
+
+export type getApiVariantsIdAvailableQuestionsResponseSuccess = (getApiVariantsIdAvailableQuestionsResponse200TextPlain | getApiVariantsIdAvailableQuestionsResponse200ApplicationJson | getApiVariantsIdAvailableQuestionsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -313,16 +348,16 @@ export const getGetApiVariantsIdAvailableQuestionsQueryKey = (id: string,
 
 
 export const getGetApiVariantsIdAvailableQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError = unknown>(id: string,
-    params?: GetApiVariantsIdAvailableQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError, TData>>, }
+    params?: GetApiVariantsIdAvailableQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiVariantsIdAvailableQuestionsQueryKey(id,params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>> = ({ signal }) => getApiVariantsIdAvailableQuestions(id,params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>> = ({ signal }) => getApiVariantsIdAvailableQuestions(id,params, { signal, ...requestOptions });
 
 
 
@@ -343,7 +378,7 @@ export function useGetApiVariantsIdAvailableQuestions<TData = Awaited<ReturnType
           TError,
           Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiVariantsIdAvailableQuestions<TData = Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError = unknown>(
@@ -354,18 +389,18 @@ export function useGetApiVariantsIdAvailableQuestions<TData = Awaited<ReturnType
           TError,
           Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiVariantsIdAvailableQuestions<TData = Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError = unknown>(
  id: string,
-    params?: GetApiVariantsIdAvailableQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError, TData>>, }
+    params?: GetApiVariantsIdAvailableQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiVariantsIdAvailableQuestions<TData = Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError = unknown>(
  id: string,
-    params?: GetApiVariantsIdAvailableQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError, TData>>, }
+    params?: GetApiVariantsIdAvailableQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiVariantsIdAvailableQuestions>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -381,12 +416,12 @@ export function useGetApiVariantsIdAvailableQuestions<TData = Awaited<ReturnType
 
 
 
-export type putApiVariantsIdQuestionsQuestionIdResponse200 = {
+export type putApiVariantsIdQuestionsQuestionIdResponse204 = {
   data: void
-  status: 200
+  status: 204
 }
 
-export type putApiVariantsIdQuestionsQuestionIdResponseSuccess = (putApiVariantsIdQuestionsQuestionIdResponse200) & {
+export type putApiVariantsIdQuestionsQuestionIdResponseSuccess = (putApiVariantsIdQuestionsQuestionIdResponse204) & {
   headers: Headers;
 };
 ;
@@ -420,15 +455,15 @@ export const putApiVariantsIdQuestionsQuestionId = async (id: string,
 
 
 export const getPutApiVariantsIdQuestionsQuestionIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>, TError,{id: string;questionId: string;data?: ReplaceQuestionDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>, TError,{id: string;questionId: string;data?: ReplaceQuestionDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>, TError,{id: string;questionId: string;data?: ReplaceQuestionDto}, TContext> => {
 
 const mutationKey = ['putApiVariantsIdQuestionsQuestionId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -436,7 +471,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>, {id: string;questionId: string;data?: ReplaceQuestionDto}> = (props) => {
           const {id,questionId,data} = props ?? {};
 
-          return  putApiVariantsIdQuestionsQuestionId(id,questionId,data,)
+          return  putApiVariantsIdQuestionsQuestionId(id,questionId,data,requestOptions)
         }
 
 
@@ -451,7 +486,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiVariantsIdQuestionsQuestionIdMutationError = unknown
 
     export const usePutApiVariantsIdQuestionsQuestionId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>, TError,{id: string;questionId: string;data?: ReplaceQuestionDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>, TError,{id: string;questionId: string;data?: ReplaceQuestionDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiVariantsIdQuestionsQuestionId>>,
         TError,

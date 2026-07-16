@@ -20,12 +20,17 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AttemptDetailDto,
   GetApiResultsParams,
-  GetApiResultsStatsParams
+  GetApiResultsStatsParams,
+  OrgStatsDto,
+  ResultWithCandidateDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -44,12 +49,22 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type getApiResultsResponse200 = {
-  data: void
+export type getApiResultsResponse200TextPlain = {
+  data: ResultWithCandidateDto[]
   status: 200
 }
 
-export type getApiResultsResponseSuccess = (getApiResultsResponse200) & {
+export type getApiResultsResponse200ApplicationJson = {
+  data: ResultWithCandidateDto[]
+  status: 200
+}
+
+export type getApiResultsResponse200TextJson = {
+  data: ResultWithCandidateDto[]
+  status: 200
+}
+
+export type getApiResultsResponseSuccess = (getApiResultsResponse200TextPlain | getApiResultsResponse200ApplicationJson | getApiResultsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -93,16 +108,16 @@ export const getGetApiResultsQueryKey = (params?: GetApiResultsParams,) => {
     }
 
 
-export const getGetApiResultsQueryOptions = <TData = Awaited<ReturnType<typeof getApiResults>>, TError = unknown>(params?: GetApiResultsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResults>>, TError, TData>>, }
+export const getGetApiResultsQueryOptions = <TData = Awaited<ReturnType<typeof getApiResults>>, TError = unknown>(params?: GetApiResultsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResults>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiResultsQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResults>>> = ({ signal }) => getApiResults(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResults>>> = ({ signal }) => getApiResults(params, { signal, ...requestOptions });
 
 
 
@@ -122,7 +137,7 @@ export function useGetApiResults<TData = Awaited<ReturnType<typeof getApiResults
           TError,
           Awaited<ReturnType<typeof getApiResults>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResults<TData = Awaited<ReturnType<typeof getApiResults>>, TError = unknown>(
@@ -132,16 +147,16 @@ export function useGetApiResults<TData = Awaited<ReturnType<typeof getApiResults
           TError,
           Awaited<ReturnType<typeof getApiResults>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResults<TData = Awaited<ReturnType<typeof getApiResults>>, TError = unknown>(
- params?: GetApiResultsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResults>>, TError, TData>>, }
+ params?: GetApiResultsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResults>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiResults<TData = Awaited<ReturnType<typeof getApiResults>>, TError = unknown>(
- params?: GetApiResultsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResults>>, TError, TData>>, }
+ params?: GetApiResultsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResults>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -157,12 +172,22 @@ export function useGetApiResults<TData = Awaited<ReturnType<typeof getApiResults
 
 
 
-export type getApiResultsCandidateIdResponse200 = {
-  data: void
+export type getApiResultsCandidateIdResponse200TextPlain = {
+  data: ResultWithCandidateDto
   status: 200
 }
 
-export type getApiResultsCandidateIdResponseSuccess = (getApiResultsCandidateIdResponse200) & {
+export type getApiResultsCandidateIdResponse200ApplicationJson = {
+  data: ResultWithCandidateDto
+  status: 200
+}
+
+export type getApiResultsCandidateIdResponse200TextJson = {
+  data: ResultWithCandidateDto
+  status: 200
+}
+
+export type getApiResultsCandidateIdResponseSuccess = (getApiResultsCandidateIdResponse200TextPlain | getApiResultsCandidateIdResponse200ApplicationJson | getApiResultsCandidateIdResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -199,16 +224,16 @@ export const getGetApiResultsCandidateIdQueryKey = (candidateId: string,) => {
     }
 
 
-export const getGetApiResultsCandidateIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError = unknown>(candidateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError, TData>>, }
+export const getGetApiResultsCandidateIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError = unknown>(candidateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiResultsCandidateIdQueryKey(candidateId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResultsCandidateId>>> = ({ signal }) => getApiResultsCandidateId(candidateId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResultsCandidateId>>> = ({ signal }) => getApiResultsCandidateId(candidateId, { signal, ...requestOptions });
 
 
 
@@ -228,7 +253,7 @@ export function useGetApiResultsCandidateId<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getApiResultsCandidateId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResultsCandidateId<TData = Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError = unknown>(
@@ -238,16 +263,16 @@ export function useGetApiResultsCandidateId<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getApiResultsCandidateId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResultsCandidateId<TData = Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError = unknown>(
- candidateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError, TData>>, }
+ candidateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiResultsCandidateId<TData = Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError = unknown>(
- candidateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError, TData>>, }
+ candidateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsCandidateId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -263,12 +288,22 @@ export function useGetApiResultsCandidateId<TData = Awaited<ReturnType<typeof ge
 
 
 
-export type getApiResultsAttemptIdDetailsResponse200 = {
-  data: void
+export type getApiResultsAttemptIdDetailsResponse200TextPlain = {
+  data: AttemptDetailDto
   status: 200
 }
 
-export type getApiResultsAttemptIdDetailsResponseSuccess = (getApiResultsAttemptIdDetailsResponse200) & {
+export type getApiResultsAttemptIdDetailsResponse200ApplicationJson = {
+  data: AttemptDetailDto
+  status: 200
+}
+
+export type getApiResultsAttemptIdDetailsResponse200TextJson = {
+  data: AttemptDetailDto
+  status: 200
+}
+
+export type getApiResultsAttemptIdDetailsResponseSuccess = (getApiResultsAttemptIdDetailsResponse200TextPlain | getApiResultsAttemptIdDetailsResponse200ApplicationJson | getApiResultsAttemptIdDetailsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -305,16 +340,16 @@ export const getGetApiResultsAttemptIdDetailsQueryKey = (attemptId: string,) => 
     }
 
 
-export const getGetApiResultsAttemptIdDetailsQueryOptions = <TData = Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError = unknown>(attemptId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError, TData>>, }
+export const getGetApiResultsAttemptIdDetailsQueryOptions = <TData = Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError = unknown>(attemptId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiResultsAttemptIdDetailsQueryKey(attemptId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>> = ({ signal }) => getApiResultsAttemptIdDetails(attemptId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>> = ({ signal }) => getApiResultsAttemptIdDetails(attemptId, { signal, ...requestOptions });
 
 
 
@@ -334,7 +369,7 @@ export function useGetApiResultsAttemptIdDetails<TData = Awaited<ReturnType<type
           TError,
           Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResultsAttemptIdDetails<TData = Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError = unknown>(
@@ -344,16 +379,16 @@ export function useGetApiResultsAttemptIdDetails<TData = Awaited<ReturnType<type
           TError,
           Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResultsAttemptIdDetails<TData = Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError = unknown>(
- attemptId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError, TData>>, }
+ attemptId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiResultsAttemptIdDetails<TData = Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError = unknown>(
- attemptId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError, TData>>, }
+ attemptId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsAttemptIdDetails>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -369,12 +404,22 @@ export function useGetApiResultsAttemptIdDetails<TData = Awaited<ReturnType<type
 
 
 
-export type getApiResultsStatsResponse200 = {
-  data: void
+export type getApiResultsStatsResponse200TextPlain = {
+  data: OrgStatsDto
   status: 200
 }
 
-export type getApiResultsStatsResponseSuccess = (getApiResultsStatsResponse200) & {
+export type getApiResultsStatsResponse200ApplicationJson = {
+  data: OrgStatsDto
+  status: 200
+}
+
+export type getApiResultsStatsResponse200TextJson = {
+  data: OrgStatsDto
+  status: 200
+}
+
+export type getApiResultsStatsResponseSuccess = (getApiResultsStatsResponse200TextPlain | getApiResultsStatsResponse200ApplicationJson | getApiResultsStatsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -418,16 +463,16 @@ export const getGetApiResultsStatsQueryKey = (params?: GetApiResultsStatsParams,
     }
 
 
-export const getGetApiResultsStatsQueryOptions = <TData = Awaited<ReturnType<typeof getApiResultsStats>>, TError = unknown>(params?: GetApiResultsStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsStats>>, TError, TData>>, }
+export const getGetApiResultsStatsQueryOptions = <TData = Awaited<ReturnType<typeof getApiResultsStats>>, TError = unknown>(params?: GetApiResultsStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsStats>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiResultsStatsQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResultsStats>>> = ({ signal }) => getApiResultsStats(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiResultsStats>>> = ({ signal }) => getApiResultsStats(params, { signal, ...requestOptions });
 
 
 
@@ -447,7 +492,7 @@ export function useGetApiResultsStats<TData = Awaited<ReturnType<typeof getApiRe
           TError,
           Awaited<ReturnType<typeof getApiResultsStats>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResultsStats<TData = Awaited<ReturnType<typeof getApiResultsStats>>, TError = unknown>(
@@ -457,16 +502,16 @@ export function useGetApiResultsStats<TData = Awaited<ReturnType<typeof getApiRe
           TError,
           Awaited<ReturnType<typeof getApiResultsStats>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiResultsStats<TData = Awaited<ReturnType<typeof getApiResultsStats>>, TError = unknown>(
- params?: GetApiResultsStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsStats>>, TError, TData>>, }
+ params?: GetApiResultsStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsStats>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiResultsStats<TData = Awaited<ReturnType<typeof getApiResultsStats>>, TError = unknown>(
- params?: GetApiResultsStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsStats>>, TError, TData>>, }
+ params?: GetApiResultsStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiResultsStats>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

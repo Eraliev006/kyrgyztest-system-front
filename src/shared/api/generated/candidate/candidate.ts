@@ -25,15 +25,20 @@ import type {
 
 import type {
   BlockCandidateDto,
+  CandidateResponseDto,
+  CandidateResponseDtoPagedResultDto,
   CreateCandidateDto,
   GetApiCandidatesParams,
   GetApiCandidatesSearchParams,
+  ProblemDetails,
   UpdateCandidateDto,
   UploadPhotoDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -52,12 +57,22 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type getApiCandidatesResponse200 = {
-  data: void
+export type getApiCandidatesResponse200TextPlain = {
+  data: CandidateResponseDtoPagedResultDto
   status: 200
 }
 
-export type getApiCandidatesResponseSuccess = (getApiCandidatesResponse200) & {
+export type getApiCandidatesResponse200ApplicationJson = {
+  data: CandidateResponseDtoPagedResultDto
+  status: 200
+}
+
+export type getApiCandidatesResponse200TextJson = {
+  data: CandidateResponseDtoPagedResultDto
+  status: 200
+}
+
+export type getApiCandidatesResponseSuccess = (getApiCandidatesResponse200TextPlain | getApiCandidatesResponse200ApplicationJson | getApiCandidatesResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -101,16 +116,16 @@ export const getGetApiCandidatesQueryKey = (params?: GetApiCandidatesParams,) =>
     }
 
 
-export const getGetApiCandidatesQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidates>>, TError = unknown>(params?: GetApiCandidatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidates>>, TError, TData>>, }
+export const getGetApiCandidatesQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidates>>, TError = unknown>(params?: GetApiCandidatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidates>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiCandidatesQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidates>>> = ({ signal }) => getApiCandidates(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidates>>> = ({ signal }) => getApiCandidates(params, { signal, ...requestOptions });
 
 
 
@@ -130,7 +145,7 @@ export function useGetApiCandidates<TData = Awaited<ReturnType<typeof getApiCand
           TError,
           Awaited<ReturnType<typeof getApiCandidates>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiCandidates<TData = Awaited<ReturnType<typeof getApiCandidates>>, TError = unknown>(
@@ -140,16 +155,16 @@ export function useGetApiCandidates<TData = Awaited<ReturnType<typeof getApiCand
           TError,
           Awaited<ReturnType<typeof getApiCandidates>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiCandidates<TData = Awaited<ReturnType<typeof getApiCandidates>>, TError = unknown>(
- params?: GetApiCandidatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidates>>, TError, TData>>, }
+ params?: GetApiCandidatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidates>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiCandidates<TData = Awaited<ReturnType<typeof getApiCandidates>>, TError = unknown>(
- params?: GetApiCandidatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidates>>, TError, TData>>, }
+ params?: GetApiCandidatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidates>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -165,12 +180,22 @@ export function useGetApiCandidates<TData = Awaited<ReturnType<typeof getApiCand
 
 
 
-export type postApiCandidatesResponse200 = {
-  data: void
+export type postApiCandidatesResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type postApiCandidatesResponseSuccess = (postApiCandidatesResponse200) & {
+export type postApiCandidatesResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type postApiCandidatesResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type postApiCandidatesResponseSuccess = (postApiCandidatesResponse200TextPlain | postApiCandidatesResponse200ApplicationJson | postApiCandidatesResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -201,15 +226,15 @@ export const postApiCandidates = async (createCandidateDto?: CreateCandidateDto,
 
 
 export const getPostApiCandidatesMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiCandidates>>, TError,{data?: CreateCandidateDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiCandidates>>, TError,{data?: CreateCandidateDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiCandidates>>, TError,{data?: CreateCandidateDto}, TContext> => {
 
 const mutationKey = ['postApiCandidates'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -217,7 +242,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiCandidates>>, {data?: CreateCandidateDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiCandidates(data,)
+          return  postApiCandidates(data,requestOptions)
         }
 
 
@@ -232,7 +257,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiCandidatesMutationError = unknown
 
     export const usePostApiCandidates = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiCandidates>>, TError,{data?: CreateCandidateDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiCandidates>>, TError,{data?: CreateCandidateDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiCandidates>>,
         TError,
@@ -290,16 +315,16 @@ export const getGetApiCandidatesSearchQueryKey = (params?: GetApiCandidatesSearc
     }
 
 
-export const getGetApiCandidatesSearchQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, }
+export const getGetApiCandidatesSearchQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiCandidatesSearchQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidatesSearch>>> = ({ signal }) => getApiCandidatesSearch(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidatesSearch>>> = ({ signal }) => getApiCandidatesSearch(params, { signal, ...requestOptions });
 
 
 
@@ -319,7 +344,7 @@ export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getA
           TError,
           Awaited<ReturnType<typeof getApiCandidatesSearch>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
@@ -329,16 +354,16 @@ export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getA
           TError,
           Awaited<ReturnType<typeof getApiCandidatesSearch>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
- params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, }
+ params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
- params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, }
+ params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -354,17 +379,44 @@ export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getA
 
 
 
-export type getApiCandidatesIdResponse200 = {
-  data: void
+export type getApiCandidatesIdResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type getApiCandidatesIdResponseSuccess = (getApiCandidatesIdResponse200) & {
+export type getApiCandidatesIdResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type getApiCandidatesIdResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type getApiCandidatesIdResponse404TextPlain = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiCandidatesIdResponse404ApplicationJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiCandidatesIdResponse404TextJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiCandidatesIdResponseSuccess = (getApiCandidatesIdResponse200TextPlain | getApiCandidatesIdResponse200ApplicationJson | getApiCandidatesIdResponse200TextJson) & {
   headers: Headers;
 };
-;
+export type getApiCandidatesIdResponseError = (getApiCandidatesIdResponse404TextPlain | getApiCandidatesIdResponse404ApplicationJson | getApiCandidatesIdResponse404TextJson) & {
+  headers: Headers;
+};
 
-export type getApiCandidatesIdResponse = (getApiCandidatesIdResponseSuccess)
+export type getApiCandidatesIdResponse = (getApiCandidatesIdResponseSuccess | getApiCandidatesIdResponseError)
 
 export const getGetApiCandidatesIdUrl = (id: string,) => {
 
@@ -396,16 +448,16 @@ export const getGetApiCandidatesIdQueryKey = (id: string,) => {
     }
 
 
-export const getGetApiCandidatesIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>>, }
+export const getGetApiCandidatesIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = ProblemDetails>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiCandidatesIdQueryKey(id);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidatesId>>> = ({ signal }) => getApiCandidatesId(id, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidatesId>>> = ({ signal }) => getApiCandidatesId(id, { signal, ...requestOptions });
 
 
 
@@ -415,36 +467,36 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetApiCandidatesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCandidatesId>>>
-export type GetApiCandidatesIdQueryError = unknown
+export type GetApiCandidatesIdQueryError = ProblemDetails
 
 
-export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = unknown>(
+export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = ProblemDetails>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiCandidatesId>>,
           TError,
           Awaited<ReturnType<typeof getApiCandidatesId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = unknown>(
+export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = ProblemDetails>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiCandidatesId>>,
           TError,
           Awaited<ReturnType<typeof getApiCandidatesId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>>, }
+export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = ProblemDetails>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>>, }
+export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCandidatesId>>, TError = ProblemDetails>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -460,12 +512,22 @@ export function useGetApiCandidatesId<TData = Awaited<ReturnType<typeof getApiCa
 
 
 
-export type putApiCandidatesIdResponse200 = {
-  data: void
+export type putApiCandidatesIdResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type putApiCandidatesIdResponseSuccess = (putApiCandidatesIdResponse200) & {
+export type putApiCandidatesIdResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdResponseSuccess = (putApiCandidatesIdResponse200TextPlain | putApiCandidatesIdResponse200ApplicationJson | putApiCandidatesIdResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -497,15 +559,15 @@ export const putApiCandidatesId = async (id: string,
 
 
 export const getPutApiCandidatesIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesId>>, TError,{id: string;data?: UpdateCandidateDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesId>>, TError,{id: string;data?: UpdateCandidateDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesId>>, TError,{id: string;data?: UpdateCandidateDto}, TContext> => {
 
 const mutationKey = ['putApiCandidatesId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -513,7 +575,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiCandidatesId>>, {id: string;data?: UpdateCandidateDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putApiCandidatesId(id,data,)
+          return  putApiCandidatesId(id,data,requestOptions)
         }
 
 
@@ -528,7 +590,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiCandidatesIdMutationError = unknown
 
     export const usePutApiCandidatesId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesId>>, TError,{id: string;data?: UpdateCandidateDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesId>>, TError,{id: string;data?: UpdateCandidateDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiCandidatesId>>,
         TError,
@@ -537,12 +599,12 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPutApiCandidatesIdMutationOptions(options), queryClient);
     }
-    export type deleteApiCandidatesIdResponse200 = {
+    export type deleteApiCandidatesIdResponse204 = {
   data: void
-  status: 200
+  status: 204
 }
 
-export type deleteApiCandidatesIdResponseSuccess = (deleteApiCandidatesIdResponse200) & {
+export type deleteApiCandidatesIdResponseSuccess = (deleteApiCandidatesIdResponse204) & {
   headers: Headers;
 };
 ;
@@ -573,15 +635,15 @@ export const deleteApiCandidatesId = async (id: string, options?: RequestInit): 
 
 
 export const getDeleteApiCandidatesIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiCandidatesId>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiCandidatesId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiCandidatesId>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['deleteApiCandidatesId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -589,7 +651,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiCandidatesId>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  deleteApiCandidatesId(id,)
+          return  deleteApiCandidatesId(id,requestOptions)
         }
 
 
@@ -604,7 +666,7 @@ const {mutation: mutationOptions} = options ?
     export type DeleteApiCandidatesIdMutationError = unknown
 
     export const useDeleteApiCandidatesId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiCandidatesId>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiCandidatesId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteApiCandidatesId>>,
         TError,
@@ -613,12 +675,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getDeleteApiCandidatesIdMutationOptions(options), queryClient);
     }
-    export type putApiCandidatesIdPhotoResponse200 = {
-  data: void
+    export type putApiCandidatesIdPhotoResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type putApiCandidatesIdPhotoResponseSuccess = (putApiCandidatesIdPhotoResponse200) & {
+export type putApiCandidatesIdPhotoResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdPhotoResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdPhotoResponseSuccess = (putApiCandidatesIdPhotoResponse200TextPlain | putApiCandidatesIdPhotoResponse200ApplicationJson | putApiCandidatesIdPhotoResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -650,15 +722,15 @@ export const putApiCandidatesIdPhoto = async (id: string,
 
 
 export const getPutApiCandidatesIdPhotoMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>, TError,{id: string;data?: UploadPhotoDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>, TError,{id: string;data?: UploadPhotoDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>, TError,{id: string;data?: UploadPhotoDto}, TContext> => {
 
 const mutationKey = ['putApiCandidatesIdPhoto'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -666,7 +738,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>, {id: string;data?: UploadPhotoDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putApiCandidatesIdPhoto(id,data,)
+          return  putApiCandidatesIdPhoto(id,data,requestOptions)
         }
 
 
@@ -681,7 +753,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiCandidatesIdPhotoMutationError = unknown
 
     export const usePutApiCandidatesIdPhoto = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>, TError,{id: string;data?: UploadPhotoDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>, TError,{id: string;data?: UploadPhotoDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiCandidatesIdPhoto>>,
         TError,
@@ -690,12 +762,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPutApiCandidatesIdPhotoMutationOptions(options), queryClient);
     }
-    export type putApiCandidatesIdAllowResponse200 = {
-  data: void
+    export type putApiCandidatesIdAllowResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type putApiCandidatesIdAllowResponseSuccess = (putApiCandidatesIdAllowResponse200) & {
+export type putApiCandidatesIdAllowResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdAllowResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdAllowResponseSuccess = (putApiCandidatesIdAllowResponse200TextPlain | putApiCandidatesIdAllowResponse200ApplicationJson | putApiCandidatesIdAllowResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -726,15 +808,15 @@ export const putApiCandidatesIdAllow = async (id: string, options?: RequestInit)
 
 
 export const getPutApiCandidatesIdAllowMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdAllow>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdAllow>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdAllow>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['putApiCandidatesIdAllow'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -742,7 +824,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiCandidatesIdAllow>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  putApiCandidatesIdAllow(id,)
+          return  putApiCandidatesIdAllow(id,requestOptions)
         }
 
 
@@ -757,7 +839,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiCandidatesIdAllowMutationError = unknown
 
     export const usePutApiCandidatesIdAllow = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdAllow>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdAllow>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiCandidatesIdAllow>>,
         TError,
@@ -766,12 +848,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPutApiCandidatesIdAllowMutationOptions(options), queryClient);
     }
-    export type putApiCandidatesIdDenyResponse200 = {
-  data: void
+    export type putApiCandidatesIdDenyResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type putApiCandidatesIdDenyResponseSuccess = (putApiCandidatesIdDenyResponse200) & {
+export type putApiCandidatesIdDenyResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdDenyResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdDenyResponseSuccess = (putApiCandidatesIdDenyResponse200TextPlain | putApiCandidatesIdDenyResponse200ApplicationJson | putApiCandidatesIdDenyResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -802,15 +894,15 @@ export const putApiCandidatesIdDeny = async (id: string, options?: RequestInit):
 
 
 export const getPutApiCandidatesIdDenyMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdDeny>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdDeny>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdDeny>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['putApiCandidatesIdDeny'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -818,7 +910,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiCandidatesIdDeny>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  putApiCandidatesIdDeny(id,)
+          return  putApiCandidatesIdDeny(id,requestOptions)
         }
 
 
@@ -833,7 +925,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiCandidatesIdDenyMutationError = unknown
 
     export const usePutApiCandidatesIdDeny = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdDeny>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdDeny>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiCandidatesIdDeny>>,
         TError,
@@ -842,12 +934,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPutApiCandidatesIdDenyMutationOptions(options), queryClient);
     }
-    export type putApiCandidatesIdBlockResponse200 = {
-  data: void
+    export type putApiCandidatesIdBlockResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type putApiCandidatesIdBlockResponseSuccess = (putApiCandidatesIdBlockResponse200) & {
+export type putApiCandidatesIdBlockResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdBlockResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type putApiCandidatesIdBlockResponseSuccess = (putApiCandidatesIdBlockResponse200TextPlain | putApiCandidatesIdBlockResponse200ApplicationJson | putApiCandidatesIdBlockResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -879,15 +981,15 @@ export const putApiCandidatesIdBlock = async (id: string,
 
 
 export const getPutApiCandidatesIdBlockMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdBlock>>, TError,{id: string;data?: BlockCandidateDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdBlock>>, TError,{id: string;data?: BlockCandidateDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdBlock>>, TError,{id: string;data?: BlockCandidateDto}, TContext> => {
 
 const mutationKey = ['putApiCandidatesIdBlock'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -895,7 +997,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiCandidatesIdBlock>>, {id: string;data?: BlockCandidateDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putApiCandidatesIdBlock(id,data,)
+          return  putApiCandidatesIdBlock(id,data,requestOptions)
         }
 
 
@@ -910,7 +1012,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiCandidatesIdBlockMutationError = unknown
 
     export const usePutApiCandidatesIdBlock = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdBlock>>, TError,{id: string;data?: BlockCandidateDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiCandidatesIdBlock>>, TError,{id: string;data?: BlockCandidateDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiCandidatesIdBlock>>,
         TError,

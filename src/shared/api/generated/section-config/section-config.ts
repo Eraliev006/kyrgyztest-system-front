@@ -24,11 +24,15 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreateSectionConfigDto
+  CreateSectionConfigDto,
+  ProblemDetails,
+  SectionConfigResponseDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -47,12 +51,22 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type getApiSectionConfigResponse200 = {
-  data: void
+export type getApiSectionConfigResponse200TextPlain = {
+  data: SectionConfigResponseDto[]
   status: 200
 }
 
-export type getApiSectionConfigResponseSuccess = (getApiSectionConfigResponse200) & {
+export type getApiSectionConfigResponse200ApplicationJson = {
+  data: SectionConfigResponseDto[]
+  status: 200
+}
+
+export type getApiSectionConfigResponse200TextJson = {
+  data: SectionConfigResponseDto[]
+  status: 200
+}
+
+export type getApiSectionConfigResponseSuccess = (getApiSectionConfigResponse200TextPlain | getApiSectionConfigResponse200ApplicationJson | getApiSectionConfigResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -89,16 +103,16 @@ export const getGetApiSectionConfigQueryKey = () => {
     }
 
 
-export const getGetApiSectionConfigQueryOptions = <TData = Awaited<ReturnType<typeof getApiSectionConfig>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfig>>, TError, TData>>, }
+export const getGetApiSectionConfigQueryOptions = <TData = Awaited<ReturnType<typeof getApiSectionConfig>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfig>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiSectionConfigQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSectionConfig>>> = ({ signal }) => getApiSectionConfig({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSectionConfig>>> = ({ signal }) => getApiSectionConfig({ signal, ...requestOptions });
 
 
 
@@ -118,7 +132,7 @@ export function useGetApiSectionConfig<TData = Awaited<ReturnType<typeof getApiS
           TError,
           Awaited<ReturnType<typeof getApiSectionConfig>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiSectionConfig<TData = Awaited<ReturnType<typeof getApiSectionConfig>>, TError = unknown>(
@@ -128,16 +142,16 @@ export function useGetApiSectionConfig<TData = Awaited<ReturnType<typeof getApiS
           TError,
           Awaited<ReturnType<typeof getApiSectionConfig>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiSectionConfig<TData = Awaited<ReturnType<typeof getApiSectionConfig>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfig>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfig>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiSectionConfig<TData = Awaited<ReturnType<typeof getApiSectionConfig>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfig>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfig>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -153,12 +167,22 @@ export function useGetApiSectionConfig<TData = Awaited<ReturnType<typeof getApiS
 
 
 
-export type postApiSectionConfigResponse200 = {
-  data: void
+export type postApiSectionConfigResponse200TextPlain = {
+  data: SectionConfigResponseDto
   status: 200
 }
 
-export type postApiSectionConfigResponseSuccess = (postApiSectionConfigResponse200) & {
+export type postApiSectionConfigResponse200ApplicationJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type postApiSectionConfigResponse200TextJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type postApiSectionConfigResponseSuccess = (postApiSectionConfigResponse200TextPlain | postApiSectionConfigResponse200ApplicationJson | postApiSectionConfigResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -189,15 +213,15 @@ export const postApiSectionConfig = async (createSectionConfigDto?: CreateSectio
 
 
 export const getPostApiSectionConfigMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSectionConfig>>, TError,{data?: CreateSectionConfigDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSectionConfig>>, TError,{data?: CreateSectionConfigDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiSectionConfig>>, TError,{data?: CreateSectionConfigDto}, TContext> => {
 
 const mutationKey = ['postApiSectionConfig'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -205,7 +229,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiSectionConfig>>, {data?: CreateSectionConfigDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiSectionConfig(data,)
+          return  postApiSectionConfig(data,requestOptions)
         }
 
 
@@ -220,7 +244,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiSectionConfigMutationError = unknown
 
     export const usePostApiSectionConfig = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSectionConfig>>, TError,{data?: CreateSectionConfigDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSectionConfig>>, TError,{data?: CreateSectionConfigDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiSectionConfig>>,
         TError,
@@ -229,17 +253,44 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiSectionConfigMutationOptions(options), queryClient);
     }
-    export type getApiSectionConfigIdResponse200 = {
-  data: void
+    export type getApiSectionConfigIdResponse200TextPlain = {
+  data: SectionConfigResponseDto
   status: 200
 }
 
-export type getApiSectionConfigIdResponseSuccess = (getApiSectionConfigIdResponse200) & {
+export type getApiSectionConfigIdResponse200ApplicationJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type getApiSectionConfigIdResponse200TextJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type getApiSectionConfigIdResponse404TextPlain = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiSectionConfigIdResponse404ApplicationJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiSectionConfigIdResponse404TextJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiSectionConfigIdResponseSuccess = (getApiSectionConfigIdResponse200TextPlain | getApiSectionConfigIdResponse200ApplicationJson | getApiSectionConfigIdResponse200TextJson) & {
   headers: Headers;
 };
-;
+export type getApiSectionConfigIdResponseError = (getApiSectionConfigIdResponse404TextPlain | getApiSectionConfigIdResponse404ApplicationJson | getApiSectionConfigIdResponse404TextJson) & {
+  headers: Headers;
+};
 
-export type getApiSectionConfigIdResponse = (getApiSectionConfigIdResponseSuccess)
+export type getApiSectionConfigIdResponse = (getApiSectionConfigIdResponseSuccess | getApiSectionConfigIdResponseError)
 
 export const getGetApiSectionConfigIdUrl = (id: string,) => {
 
@@ -271,16 +322,16 @@ export const getGetApiSectionConfigIdQueryKey = (id: string,) => {
     }
 
 
-export const getGetApiSectionConfigIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>>, }
+export const getGetApiSectionConfigIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = ProblemDetails>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiSectionConfigIdQueryKey(id);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSectionConfigId>>> = ({ signal }) => getApiSectionConfigId(id, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSectionConfigId>>> = ({ signal }) => getApiSectionConfigId(id, { signal, ...requestOptions });
 
 
 
@@ -290,36 +341,36 @@ const {query: queryOptions} = options ?? {};
 }
 
 export type GetApiSectionConfigIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiSectionConfigId>>>
-export type GetApiSectionConfigIdQueryError = unknown
+export type GetApiSectionConfigIdQueryError = ProblemDetails
 
 
-export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = unknown>(
+export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = ProblemDetails>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiSectionConfigId>>,
           TError,
           Awaited<ReturnType<typeof getApiSectionConfigId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = unknown>(
+export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = ProblemDetails>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiSectionConfigId>>,
           TError,
           Awaited<ReturnType<typeof getApiSectionConfigId>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>>, }
+export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = ProblemDetails>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>>, }
+export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getApiSectionConfigId>>, TError = ProblemDetails>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSectionConfigId>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -335,12 +386,22 @@ export function useGetApiSectionConfigId<TData = Awaited<ReturnType<typeof getAp
 
 
 
-export type putApiSectionConfigIdResponse200 = {
-  data: void
+export type putApiSectionConfigIdResponse200TextPlain = {
+  data: SectionConfigResponseDto
   status: 200
 }
 
-export type putApiSectionConfigIdResponseSuccess = (putApiSectionConfigIdResponse200) & {
+export type putApiSectionConfigIdResponse200ApplicationJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type putApiSectionConfigIdResponse200TextJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type putApiSectionConfigIdResponseSuccess = (putApiSectionConfigIdResponse200TextPlain | putApiSectionConfigIdResponse200ApplicationJson | putApiSectionConfigIdResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -372,15 +433,15 @@ export const putApiSectionConfigId = async (id: string,
 
 
 export const getPutApiSectionConfigIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiSectionConfigId>>, TError,{id: string;data?: CreateSectionConfigDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiSectionConfigId>>, TError,{id: string;data?: CreateSectionConfigDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiSectionConfigId>>, TError,{id: string;data?: CreateSectionConfigDto}, TContext> => {
 
 const mutationKey = ['putApiSectionConfigId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -388,7 +449,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiSectionConfigId>>, {id: string;data?: CreateSectionConfigDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putApiSectionConfigId(id,data,)
+          return  putApiSectionConfigId(id,data,requestOptions)
         }
 
 
@@ -403,7 +464,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiSectionConfigIdMutationError = unknown
 
     export const usePutApiSectionConfigId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiSectionConfigId>>, TError,{id: string;data?: CreateSectionConfigDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiSectionConfigId>>, TError,{id: string;data?: CreateSectionConfigDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiSectionConfigId>>,
         TError,
@@ -412,12 +473,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPutApiSectionConfigIdMutationOptions(options), queryClient);
     }
-    export type deleteApiSectionConfigIdResponse200 = {
-  data: void
+    export type deleteApiSectionConfigIdResponse200TextPlain = {
+  data: SectionConfigResponseDto
   status: 200
 }
 
-export type deleteApiSectionConfigIdResponseSuccess = (deleteApiSectionConfigIdResponse200) & {
+export type deleteApiSectionConfigIdResponse200ApplicationJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type deleteApiSectionConfigIdResponse200TextJson = {
+  data: SectionConfigResponseDto
+  status: 200
+}
+
+export type deleteApiSectionConfigIdResponseSuccess = (deleteApiSectionConfigIdResponse200TextPlain | deleteApiSectionConfigIdResponse200ApplicationJson | deleteApiSectionConfigIdResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -448,15 +519,15 @@ export const deleteApiSectionConfigId = async (id: string, options?: RequestInit
 
 
 export const getDeleteApiSectionConfigIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiSectionConfigId>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiSectionConfigId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiSectionConfigId>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['deleteApiSectionConfigId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -464,7 +535,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiSectionConfigId>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  deleteApiSectionConfigId(id,)
+          return  deleteApiSectionConfigId(id,requestOptions)
         }
 
 
@@ -479,7 +550,7 @@ const {mutation: mutationOptions} = options ?
     export type DeleteApiSectionConfigIdMutationError = unknown
 
     export const useDeleteApiSectionConfigId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiSectionConfigId>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiSectionConfigId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteApiSectionConfigId>>,
         TError,

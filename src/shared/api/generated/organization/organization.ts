@@ -24,11 +24,14 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreateOrganizationDto
+  CreateOrganizationDto,
+  OrganizationDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -47,12 +50,22 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type getApiOrganizationsResponse200 = {
-  data: void
+export type getApiOrganizationsResponse200TextPlain = {
+  data: OrganizationDto[]
   status: 200
 }
 
-export type getApiOrganizationsResponseSuccess = (getApiOrganizationsResponse200) & {
+export type getApiOrganizationsResponse200ApplicationJson = {
+  data: OrganizationDto[]
+  status: 200
+}
+
+export type getApiOrganizationsResponse200TextJson = {
+  data: OrganizationDto[]
+  status: 200
+}
+
+export type getApiOrganizationsResponseSuccess = (getApiOrganizationsResponse200TextPlain | getApiOrganizationsResponse200ApplicationJson | getApiOrganizationsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -89,16 +102,16 @@ export const getGetApiOrganizationsQueryKey = () => {
     }
 
 
-export const getGetApiOrganizationsQueryOptions = <TData = Awaited<ReturnType<typeof getApiOrganizations>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiOrganizations>>, TError, TData>>, }
+export const getGetApiOrganizationsQueryOptions = <TData = Awaited<ReturnType<typeof getApiOrganizations>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiOrganizations>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiOrganizationsQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiOrganizations>>> = ({ signal }) => getApiOrganizations({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiOrganizations>>> = ({ signal }) => getApiOrganizations({ signal, ...requestOptions });
 
 
 
@@ -118,7 +131,7 @@ export function useGetApiOrganizations<TData = Awaited<ReturnType<typeof getApiO
           TError,
           Awaited<ReturnType<typeof getApiOrganizations>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiOrganizations<TData = Awaited<ReturnType<typeof getApiOrganizations>>, TError = unknown>(
@@ -128,16 +141,16 @@ export function useGetApiOrganizations<TData = Awaited<ReturnType<typeof getApiO
           TError,
           Awaited<ReturnType<typeof getApiOrganizations>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiOrganizations<TData = Awaited<ReturnType<typeof getApiOrganizations>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiOrganizations>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiOrganizations>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiOrganizations<TData = Awaited<ReturnType<typeof getApiOrganizations>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiOrganizations>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiOrganizations>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -153,12 +166,22 @@ export function useGetApiOrganizations<TData = Awaited<ReturnType<typeof getApiO
 
 
 
-export type postApiOrganizationsResponse200 = {
-  data: void
+export type postApiOrganizationsResponse200TextPlain = {
+  data: OrganizationDto
   status: 200
 }
 
-export type postApiOrganizationsResponseSuccess = (postApiOrganizationsResponse200) & {
+export type postApiOrganizationsResponse200ApplicationJson = {
+  data: OrganizationDto
+  status: 200
+}
+
+export type postApiOrganizationsResponse200TextJson = {
+  data: OrganizationDto
+  status: 200
+}
+
+export type postApiOrganizationsResponseSuccess = (postApiOrganizationsResponse200TextPlain | postApiOrganizationsResponse200ApplicationJson | postApiOrganizationsResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -189,15 +212,15 @@ export const postApiOrganizations = async (createOrganizationDto?: CreateOrganiz
 
 
 export const getPostApiOrganizationsMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiOrganizations>>, TError,{data?: CreateOrganizationDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiOrganizations>>, TError,{data?: CreateOrganizationDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiOrganizations>>, TError,{data?: CreateOrganizationDto}, TContext> => {
 
 const mutationKey = ['postApiOrganizations'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -205,7 +228,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiOrganizations>>, {data?: CreateOrganizationDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiOrganizations(data,)
+          return  postApiOrganizations(data,requestOptions)
         }
 
 
@@ -220,7 +243,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiOrganizationsMutationError = unknown
 
     export const usePostApiOrganizations = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiOrganizations>>, TError,{data?: CreateOrganizationDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiOrganizations>>, TError,{data?: CreateOrganizationDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiOrganizations>>,
         TError,
@@ -229,12 +252,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiOrganizationsMutationOptions(options), queryClient);
     }
-    export type putApiOrganizationsIdResponse200 = {
-  data: void
+    export type putApiOrganizationsIdResponse200TextPlain = {
+  data: OrganizationDto
   status: 200
 }
 
-export type putApiOrganizationsIdResponseSuccess = (putApiOrganizationsIdResponse200) & {
+export type putApiOrganizationsIdResponse200ApplicationJson = {
+  data: OrganizationDto
+  status: 200
+}
+
+export type putApiOrganizationsIdResponse200TextJson = {
+  data: OrganizationDto
+  status: 200
+}
+
+export type putApiOrganizationsIdResponseSuccess = (putApiOrganizationsIdResponse200TextPlain | putApiOrganizationsIdResponse200ApplicationJson | putApiOrganizationsIdResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -266,15 +299,15 @@ export const putApiOrganizationsId = async (id: string,
 
 
 export const getPutApiOrganizationsIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiOrganizationsId>>, TError,{id: string;data?: CreateOrganizationDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiOrganizationsId>>, TError,{id: string;data?: CreateOrganizationDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof putApiOrganizationsId>>, TError,{id: string;data?: CreateOrganizationDto}, TContext> => {
 
 const mutationKey = ['putApiOrganizationsId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -282,7 +315,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiOrganizationsId>>, {id: string;data?: CreateOrganizationDto}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putApiOrganizationsId(id,data,)
+          return  putApiOrganizationsId(id,data,requestOptions)
         }
 
 
@@ -297,7 +330,7 @@ const {mutation: mutationOptions} = options ?
     export type PutApiOrganizationsIdMutationError = unknown
 
     export const usePutApiOrganizationsId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiOrganizationsId>>, TError,{id: string;data?: CreateOrganizationDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiOrganizationsId>>, TError,{id: string;data?: CreateOrganizationDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof putApiOrganizationsId>>,
         TError,
@@ -306,12 +339,12 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPutApiOrganizationsIdMutationOptions(options), queryClient);
     }
-    export type deleteApiOrganizationsIdResponse200 = {
+    export type deleteApiOrganizationsIdResponse204 = {
   data: void
-  status: 200
+  status: 204
 }
 
-export type deleteApiOrganizationsIdResponseSuccess = (deleteApiOrganizationsIdResponse200) & {
+export type deleteApiOrganizationsIdResponseSuccess = (deleteApiOrganizationsIdResponse204) & {
   headers: Headers;
 };
 ;
@@ -342,15 +375,15 @@ export const deleteApiOrganizationsId = async (id: string, options?: RequestInit
 
 
 export const getDeleteApiOrganizationsIdMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiOrganizationsId>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiOrganizationsId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteApiOrganizationsId>>, TError,{id: string}, TContext> => {
 
 const mutationKey = ['deleteApiOrganizationsId'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -358,7 +391,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiOrganizationsId>>, {id: string}> = (props) => {
           const {id} = props ?? {};
 
-          return  deleteApiOrganizationsId(id,)
+          return  deleteApiOrganizationsId(id,requestOptions)
         }
 
 
@@ -373,7 +406,7 @@ const {mutation: mutationOptions} = options ?
     export type DeleteApiOrganizationsIdMutationError = unknown
 
     export const useDeleteApiOrganizationsId = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiOrganizationsId>>, TError,{id: string}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteApiOrganizationsId>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteApiOrganizationsId>>,
         TError,

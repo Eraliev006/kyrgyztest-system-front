@@ -20,11 +20,14 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AuditLogResponseDto,
   GetApiAuditParams
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -43,12 +46,22 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type getApiAuditResponse200 = {
-  data: void
+export type getApiAuditResponse200TextPlain = {
+  data: AuditLogResponseDto[]
   status: 200
 }
 
-export type getApiAuditResponseSuccess = (getApiAuditResponse200) & {
+export type getApiAuditResponse200ApplicationJson = {
+  data: AuditLogResponseDto[]
+  status: 200
+}
+
+export type getApiAuditResponse200TextJson = {
+  data: AuditLogResponseDto[]
+  status: 200
+}
+
+export type getApiAuditResponseSuccess = (getApiAuditResponse200TextPlain | getApiAuditResponse200ApplicationJson | getApiAuditResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -92,16 +105,16 @@ export const getGetApiAuditQueryKey = (params?: GetApiAuditParams,) => {
     }
 
 
-export const getGetApiAuditQueryOptions = <TData = Awaited<ReturnType<typeof getApiAudit>>, TError = unknown>(params?: GetApiAuditParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAudit>>, TError, TData>>, }
+export const getGetApiAuditQueryOptions = <TData = Awaited<ReturnType<typeof getApiAudit>>, TError = unknown>(params?: GetApiAuditParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAudit>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetApiAuditQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiAudit>>> = ({ signal }) => getApiAudit(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiAudit>>> = ({ signal }) => getApiAudit(params, { signal, ...requestOptions });
 
 
 
@@ -121,7 +134,7 @@ export function useGetApiAudit<TData = Awaited<ReturnType<typeof getApiAudit>>, 
           TError,
           Awaited<ReturnType<typeof getApiAudit>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiAudit<TData = Awaited<ReturnType<typeof getApiAudit>>, TError = unknown>(
@@ -131,16 +144,16 @@ export function useGetApiAudit<TData = Awaited<ReturnType<typeof getApiAudit>>, 
           TError,
           Awaited<ReturnType<typeof getApiAudit>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetApiAudit<TData = Awaited<ReturnType<typeof getApiAudit>>, TError = unknown>(
- params?: GetApiAuditParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAudit>>, TError, TData>>, }
+ params?: GetApiAuditParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAudit>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetApiAudit<TData = Awaited<ReturnType<typeof getApiAudit>>, TError = unknown>(
- params?: GetApiAuditParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAudit>>, TError, TData>>, }
+ params?: GetApiAuditParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiAudit>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

@@ -15,30 +15,65 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CandidateResponseDto,
   ExamLoginDto,
+  ExamSectionDto,
+  ProblemDetails,
+  ResultResponseDto,
   SaveAnswerDto,
   SectionRequestDto,
   StartExamRequestDto,
+  StartExamResultDto,
   SubmitExamDto,
+  SubmitSectionResultDto,
   UnlockDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
-export type postApiExamUnlockResponse200 = {
-  data: void
+
+export type postApiExamUnlockResponse200TextPlain = {
+  data: string
   status: 200
 }
 
-export type postApiExamUnlockResponseSuccess = (postApiExamUnlockResponse200) & {
+export type postApiExamUnlockResponse200ApplicationJson = {
+  data: string
+  status: 200
+}
+
+export type postApiExamUnlockResponse200TextJson = {
+  data: string
+  status: 200
+}
+
+export type postApiExamUnlockResponse401TextPlain = {
+  data: ProblemDetails
+  status: 401
+}
+
+export type postApiExamUnlockResponse401ApplicationJson = {
+  data: ProblemDetails
+  status: 401
+}
+
+export type postApiExamUnlockResponse401TextJson = {
+  data: ProblemDetails
+  status: 401
+}
+
+export type postApiExamUnlockResponseSuccess = (postApiExamUnlockResponse200TextPlain | postApiExamUnlockResponse200ApplicationJson | postApiExamUnlockResponse200TextJson) & {
   headers: Headers;
 };
-;
+export type postApiExamUnlockResponseError = (postApiExamUnlockResponse401TextPlain | postApiExamUnlockResponse401ApplicationJson | postApiExamUnlockResponse401TextJson) & {
+  headers: Headers;
+};
 
-export type postApiExamUnlockResponse = (postApiExamUnlockResponseSuccess)
+export type postApiExamUnlockResponse = (postApiExamUnlockResponseSuccess | postApiExamUnlockResponseError)
 
 export const getPostApiExamUnlockUrl = () => {
 
@@ -63,16 +98,16 @@ export const postApiExamUnlock = async (unlockDto?: UnlockDto, options?: Request
 
 
 
-export const getPostApiExamUnlockMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamUnlock>>, TError,{data?: UnlockDto}, TContext>, }
+export const getPostApiExamUnlockMutationOptions = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamUnlock>>, TError,{data?: UnlockDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamUnlock>>, TError,{data?: UnlockDto}, TContext> => {
 
 const mutationKey = ['postApiExamUnlock'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -80,7 +115,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamUnlock>>, {data?: UnlockDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamUnlock(data,)
+          return  postApiExamUnlock(data,requestOptions)
         }
 
 
@@ -92,10 +127,10 @@ const {mutation: mutationOptions} = options ?
 
     export type PostApiExamUnlockMutationResult = NonNullable<Awaited<ReturnType<typeof postApiExamUnlock>>>
     export type PostApiExamUnlockMutationBody = UnlockDto | undefined
-    export type PostApiExamUnlockMutationError = unknown
+    export type PostApiExamUnlockMutationError = ProblemDetails
 
-    export const usePostApiExamUnlock = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamUnlock>>, TError,{data?: UnlockDto}, TContext>, }
+    export const usePostApiExamUnlock = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamUnlock>>, TError,{data?: UnlockDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamUnlock>>,
         TError,
@@ -104,17 +139,59 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiExamUnlockMutationOptions(options), queryClient);
     }
-    export type postApiExamLoginResponse200 = {
-  data: void
+    export type postApiExamLoginResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type postApiExamLoginResponseSuccess = (postApiExamLoginResponse200) & {
+export type postApiExamLoginResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type postApiExamLoginResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type postApiExamLoginResponse403TextPlain = {
+  data: ProblemDetails
+  status: 403
+}
+
+export type postApiExamLoginResponse403ApplicationJson = {
+  data: ProblemDetails
+  status: 403
+}
+
+export type postApiExamLoginResponse403TextJson = {
+  data: ProblemDetails
+  status: 403
+}
+
+export type postApiExamLoginResponse404TextPlain = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type postApiExamLoginResponse404ApplicationJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type postApiExamLoginResponse404TextJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type postApiExamLoginResponseSuccess = (postApiExamLoginResponse200TextPlain | postApiExamLoginResponse200ApplicationJson | postApiExamLoginResponse200TextJson) & {
   headers: Headers;
 };
-;
+export type postApiExamLoginResponseError = (postApiExamLoginResponse403TextPlain | postApiExamLoginResponse403ApplicationJson | postApiExamLoginResponse403TextJson | postApiExamLoginResponse404TextPlain | postApiExamLoginResponse404ApplicationJson | postApiExamLoginResponse404TextJson) & {
+  headers: Headers;
+};
 
-export type postApiExamLoginResponse = (postApiExamLoginResponseSuccess)
+export type postApiExamLoginResponse = (postApiExamLoginResponseSuccess | postApiExamLoginResponseError)
 
 export const getPostApiExamLoginUrl = () => {
 
@@ -139,16 +216,16 @@ export const postApiExamLogin = async (examLoginDto?: ExamLoginDto, options?: Re
 
 
 
-export const getPostApiExamLoginMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamLogin>>, TError,{data?: ExamLoginDto}, TContext>, }
+export const getPostApiExamLoginMutationOptions = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamLogin>>, TError,{data?: ExamLoginDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamLogin>>, TError,{data?: ExamLoginDto}, TContext> => {
 
 const mutationKey = ['postApiExamLogin'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -156,7 +233,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamLogin>>, {data?: ExamLoginDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamLogin(data,)
+          return  postApiExamLogin(data,requestOptions)
         }
 
 
@@ -168,10 +245,10 @@ const {mutation: mutationOptions} = options ?
 
     export type PostApiExamLoginMutationResult = NonNullable<Awaited<ReturnType<typeof postApiExamLogin>>>
     export type PostApiExamLoginMutationBody = ExamLoginDto | undefined
-    export type PostApiExamLoginMutationError = unknown
+    export type PostApiExamLoginMutationError = ProblemDetails
 
-    export const usePostApiExamLogin = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamLogin>>, TError,{data?: ExamLoginDto}, TContext>, }
+    export const usePostApiExamLogin = <TError = ProblemDetails,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamLogin>>, TError,{data?: ExamLoginDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamLogin>>,
         TError,
@@ -180,12 +257,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiExamLoginMutationOptions(options), queryClient);
     }
-    export type postApiExamStartResponse200 = {
-  data: void
+    export type postApiExamStartResponse200TextPlain = {
+  data: StartExamResultDto
   status: 200
 }
 
-export type postApiExamStartResponseSuccess = (postApiExamStartResponse200) & {
+export type postApiExamStartResponse200ApplicationJson = {
+  data: StartExamResultDto
+  status: 200
+}
+
+export type postApiExamStartResponse200TextJson = {
+  data: StartExamResultDto
+  status: 200
+}
+
+export type postApiExamStartResponseSuccess = (postApiExamStartResponse200TextPlain | postApiExamStartResponse200ApplicationJson | postApiExamStartResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -216,15 +303,15 @@ export const postApiExamStart = async (startExamRequestDto?: StartExamRequestDto
 
 
 export const getPostApiExamStartMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamStart>>, TError,{data?: StartExamRequestDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamStart>>, TError,{data?: StartExamRequestDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamStart>>, TError,{data?: StartExamRequestDto}, TContext> => {
 
 const mutationKey = ['postApiExamStart'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -232,7 +319,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamStart>>, {data?: StartExamRequestDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamStart(data,)
+          return  postApiExamStart(data,requestOptions)
         }
 
 
@@ -247,7 +334,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiExamStartMutationError = unknown
 
     export const usePostApiExamStart = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamStart>>, TError,{data?: StartExamRequestDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamStart>>, TError,{data?: StartExamRequestDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamStart>>,
         TError,
@@ -256,12 +343,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiExamStartMutationOptions(options), queryClient);
     }
-    export type postApiExamSectionStartResponse200 = {
-  data: void
+    export type postApiExamSectionStartResponse200TextPlain = {
+  data: ExamSectionDto
   status: 200
 }
 
-export type postApiExamSectionStartResponseSuccess = (postApiExamSectionStartResponse200) & {
+export type postApiExamSectionStartResponse200ApplicationJson = {
+  data: ExamSectionDto
+  status: 200
+}
+
+export type postApiExamSectionStartResponse200TextJson = {
+  data: ExamSectionDto
+  status: 200
+}
+
+export type postApiExamSectionStartResponseSuccess = (postApiExamSectionStartResponse200TextPlain | postApiExamSectionStartResponse200ApplicationJson | postApiExamSectionStartResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -292,15 +389,15 @@ export const postApiExamSectionStart = async (sectionRequestDto?: SectionRequest
 
 
 export const getPostApiExamSectionStartMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionStart>>, TError,{data?: SectionRequestDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionStart>>, TError,{data?: SectionRequestDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionStart>>, TError,{data?: SectionRequestDto}, TContext> => {
 
 const mutationKey = ['postApiExamSectionStart'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -308,7 +405,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamSectionStart>>, {data?: SectionRequestDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamSectionStart(data,)
+          return  postApiExamSectionStart(data,requestOptions)
         }
 
 
@@ -323,7 +420,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiExamSectionStartMutationError = unknown
 
     export const usePostApiExamSectionStart = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionStart>>, TError,{data?: SectionRequestDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionStart>>, TError,{data?: SectionRequestDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamSectionStart>>,
         TError,
@@ -332,12 +429,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiExamSectionStartMutationOptions(options), queryClient);
     }
-    export type postApiExamSectionSubmitResponse200 = {
-  data: void
+    export type postApiExamSectionSubmitResponse200TextPlain = {
+  data: SubmitSectionResultDto
   status: 200
 }
 
-export type postApiExamSectionSubmitResponseSuccess = (postApiExamSectionSubmitResponse200) & {
+export type postApiExamSectionSubmitResponse200ApplicationJson = {
+  data: SubmitSectionResultDto
+  status: 200
+}
+
+export type postApiExamSectionSubmitResponse200TextJson = {
+  data: SubmitSectionResultDto
+  status: 200
+}
+
+export type postApiExamSectionSubmitResponseSuccess = (postApiExamSectionSubmitResponse200TextPlain | postApiExamSectionSubmitResponse200ApplicationJson | postApiExamSectionSubmitResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -368,15 +475,15 @@ export const postApiExamSectionSubmit = async (sectionRequestDto?: SectionReques
 
 
 export const getPostApiExamSectionSubmitMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionSubmit>>, TError,{data?: SectionRequestDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionSubmit>>, TError,{data?: SectionRequestDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionSubmit>>, TError,{data?: SectionRequestDto}, TContext> => {
 
 const mutationKey = ['postApiExamSectionSubmit'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -384,7 +491,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamSectionSubmit>>, {data?: SectionRequestDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamSectionSubmit(data,)
+          return  postApiExamSectionSubmit(data,requestOptions)
         }
 
 
@@ -399,7 +506,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiExamSectionSubmitMutationError = unknown
 
     export const usePostApiExamSectionSubmit = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionSubmit>>, TError,{data?: SectionRequestDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSectionSubmit>>, TError,{data?: SectionRequestDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamSectionSubmit>>,
         TError,
@@ -444,15 +551,15 @@ export const postApiExamAnswer = async (saveAnswerDto?: SaveAnswerDto, options?:
 
 
 export const getPostApiExamAnswerMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswer>>, TError,{data?: SaveAnswerDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswer>>, TError,{data?: SaveAnswerDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswer>>, TError,{data?: SaveAnswerDto}, TContext> => {
 
 const mutationKey = ['postApiExamAnswer'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -460,7 +567,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamAnswer>>, {data?: SaveAnswerDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamAnswer(data,)
+          return  postApiExamAnswer(data,requestOptions)
         }
 
 
@@ -475,7 +582,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiExamAnswerMutationError = unknown
 
     export const usePostApiExamAnswer = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswer>>, TError,{data?: SaveAnswerDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswer>>, TError,{data?: SaveAnswerDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamAnswer>>,
         TError,
@@ -484,12 +591,22 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getPostApiExamAnswerMutationOptions(options), queryClient);
     }
-    export type postApiExamSubmitResponse200 = {
-  data: void
+    export type postApiExamSubmitResponse200TextPlain = {
+  data: ResultResponseDto
   status: 200
 }
 
-export type postApiExamSubmitResponseSuccess = (postApiExamSubmitResponse200) & {
+export type postApiExamSubmitResponse200ApplicationJson = {
+  data: ResultResponseDto
+  status: 200
+}
+
+export type postApiExamSubmitResponse200TextJson = {
+  data: ResultResponseDto
+  status: 200
+}
+
+export type postApiExamSubmitResponseSuccess = (postApiExamSubmitResponse200TextPlain | postApiExamSubmitResponse200ApplicationJson | postApiExamSubmitResponse200TextJson) & {
   headers: Headers;
 };
 ;
@@ -520,15 +637,15 @@ export const postApiExamSubmit = async (submitExamDto?: SubmitExamDto, options?:
 
 
 export const getPostApiExamSubmitMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSubmit>>, TError,{data?: SubmitExamDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSubmit>>, TError,{data?: SubmitExamDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiExamSubmit>>, TError,{data?: SubmitExamDto}, TContext> => {
 
 const mutationKey = ['postApiExamSubmit'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -536,7 +653,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamSubmit>>, {data?: SubmitExamDto}> = (props) => {
           const {data} = props ?? {};
 
-          return  postApiExamSubmit(data,)
+          return  postApiExamSubmit(data,requestOptions)
         }
 
 
@@ -551,7 +668,7 @@ const {mutation: mutationOptions} = options ?
     export type PostApiExamSubmitMutationError = unknown
 
     export const usePostApiExamSubmit = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSubmit>>, TError,{data?: SubmitExamDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamSubmit>>, TError,{data?: SubmitExamDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiExamSubmit>>,
         TError,
