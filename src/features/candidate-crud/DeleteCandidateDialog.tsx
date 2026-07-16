@@ -42,6 +42,7 @@ export function DeleteCandidateDialog({
       description="Это действие необратимо."
       onConfirm={() => mutation.mutate({ id: candidate.id! })}
       isPending={mutation.isPending}
+      testId="delete-candidate-dialog"
     />
   )
 }

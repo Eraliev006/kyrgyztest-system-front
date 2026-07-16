@@ -43,6 +43,7 @@ export function DeleteSectionConfigDialog({
       description="Это действие необратимо."
       onConfirm={() => mutation.mutate({ id: config.id! })}
       isPending={mutation.isPending}
+      testId="delete-section-config-dialog"
     />
   )
 }

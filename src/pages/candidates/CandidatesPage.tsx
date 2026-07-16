@@ -10,7 +10,9 @@ export default function CandidatesPage() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Кандидаты</h1>
-        <Button onClick={() => setCreateOpen(true)}>Добавить кандидата</Button>
+        <Button onClick={() => setCreateOpen(true)} data-testid="candidate-create-button">
+          Добавить кандидата
+        </Button>
       </div>
 
       <CandidateTable />

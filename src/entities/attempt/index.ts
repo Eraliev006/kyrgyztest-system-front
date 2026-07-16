@@ -4,5 +4,6 @@ export type {
   ExamQuestion,
   ExamAnswerOption,
   SubmitSectionResult,
+  ActiveAttempt,
 } from './model'
 export { isOrderedQuestion, findCurrentSection } from './model'

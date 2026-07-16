@@ -12,7 +12,11 @@ export function SubmitSectionButton({ onConfirm, isPending }: SubmitSectionButto
 
   return (
     <>
-      <Button onClick={() => setConfirmOpen(true)} disabled={isPending}>
+      <Button
+        onClick={() => setConfirmOpen(true)}
+        disabled={isPending}
+        data-testid="submit-section-button"
+      >
         Завершить раздел
       </Button>
       <ConfirmDialog
@@ -22,6 +26,7 @@ export function SubmitSectionButton({ onConfirm, isPending }: SubmitSectionButto
         description="Вернуться к вопросам раздела будет нельзя."
         confirmLabel="Завершить"
         isPending={isPending}
+        testId="submit-section-confirm-dialog"
         onConfirm={() => {
           setConfirmOpen(false)
           onConfirm()

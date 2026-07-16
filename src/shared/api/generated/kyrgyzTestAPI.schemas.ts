@@ -4,14 +4,6 @@
  * KyrgyzTest.API
  * OpenAPI spec version: 1.0
  */
-export interface AnswerOptionResponseDto {
-  id?: string;
-  /** @nullable */
-  content?: string | null;
-  isCorrect?: boolean;
-  orderIndex?: number;
-}
-
 export type SectionType = typeof SectionType[keyof typeof SectionType];
 
 
@@ -22,6 +14,27 @@ export const SectionType = {
   Writing: 'Writing',
   Speaking: 'Speaking',
 } as const;
+
+export interface ActiveAttemptDto {
+  candidateId?: string;
+  /** @nullable */
+  fullName?: string | null;
+  /** @nullable */
+  photo?: string | null;
+  attemptId?: string;
+  attemptStartedAt?: string;
+  currentSection?: SectionType;
+  /** @nullable */
+  sectionDeadlineUtc?: string | null;
+}
+
+export interface AnswerOptionResponseDto {
+  id?: string;
+  /** @nullable */
+  content?: string | null;
+  isCorrect?: boolean;
+  orderIndex?: number;
+}
 
 export type LanguageLevel = typeof LanguageLevel[keyof typeof LanguageLevel];
 
@@ -226,6 +239,8 @@ export interface ExamSectionDto {
   timeLimitMinutes?: number;
   isCompleted?: boolean;
   /** @nullable */
+  deadlineUtc?: string | null;
+  /** @nullable */
   questions?: ExamQuestionDto[] | null;
 }
 
@@ -374,6 +389,12 @@ export interface SectionRequestDto {
   section?: SectionType;
 }
 
+export interface SectionStatusDto {
+  isCompleted?: boolean;
+  /** @nullable */
+  deadlineUtc?: string | null;
+}
+
 export interface StartExamRequestDto {
   candidateId?: string;
 }
@@ -479,6 +500,11 @@ export type GetApiCandidatesSearchParams = {
 inn?: string;
 code?: string;
 fullName?: string;
+};
+
+export type GetApiExamSectionStatusParams = {
+attemptId?: string;
+section?: SectionType;
 };
 
 export type PostApiFilesAudioBody = {

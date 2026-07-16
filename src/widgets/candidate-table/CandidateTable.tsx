@@ -74,9 +74,10 @@ export function CandidateTable() {
         </SelectContent>
       </Select>
 
-      <Table>
+      <Table data-testid="candidates-table">
         <TableHeader>
           <TableRow>
+            <TableHead>Фото</TableHead>
             <TableHead>ФИО</TableHead>
             <TableHead>ИНН</TableHead>
             <TableHead>Организация</TableHead>
@@ -86,14 +87,25 @@ export function CandidateTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && <TableSkeletonRows columns={6} />}
+          {isLoading && <TableSkeletonRows columns={7} />}
           {!isLoading && candidates.length === 0 && (
             <TableRow>
-              <TableCell colSpan={6}>Кандидатов пока нет</TableCell>
+              <TableCell colSpan={7}>Кандидатов пока нет</TableCell>
             </TableRow>
           )}
           {candidates.map((candidate) => (
-            <TableRow key={candidate.id}>
+            <TableRow key={candidate.id} data-testid={`candidate-row-${candidate.id}`}>
+              <TableCell>
+                {candidate.photo ? (
+                  <img
+                    src={candidate.photo}
+                    alt={candidate.fullName ?? ''}
+                    className="size-10 rounded-md object-cover"
+                  />
+                ) : (
+                  <div className="size-10 rounded-md border" />
+                )}
+              </TableCell>
               <TableCell>{candidate.fullName}</TableCell>
               <TableCell>{candidate.inn}</TableCell>
               <TableCell>{organizationName(candidate.organizationId)}</TableCell>
@@ -105,10 +117,20 @@ export function CandidateTable() {
               </TableCell>
               <TableCell className="flex justify-end gap-2">
                 <CandidateAccessActions candidate={candidate} />
-                <Button variant="outline" size="sm" onClick={() => setEditing(candidate)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditing(candidate)}
+                  data-testid={`candidate-row-${candidate.id}-edit`}
+                >
                   Изменить
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => setDeleting(candidate)}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setDeleting(candidate)}
+                  data-testid={`candidate-row-${candidate.id}-delete`}
+                >
                   Удалить
                 </Button>
               </TableCell>
@@ -123,10 +145,11 @@ export function CandidateTable() {
           size="sm"
           disabled={page <= 1}
           onClick={() => setPage((p) => p - 1)}
+          data-testid="candidates-prev-page"
         >
           Назад
         </Button>
-        <span className="text-sm text-muted-foreground">
+        <span className="text-sm text-muted-foreground" data-testid="candidates-page-indicator">
           Страница {page} из {totalPages}
         </span>
         <Button
@@ -134,6 +157,7 @@ export function CandidateTable() {
           size="sm"
           disabled={page >= totalPages}
           onClick={() => setPage((p) => p + 1)}
+          data-testid="candidates-next-page"
         >
           Вперёд
         </Button>

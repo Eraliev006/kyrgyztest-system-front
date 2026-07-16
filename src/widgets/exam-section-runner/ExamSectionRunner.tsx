@@ -116,19 +116,20 @@ export function ExamSectionRunner() {
   }
 
   // setState only ever happens inside the interval callback (subscribing to an
-  // external clock), never synchronously in the effect body — Date.now()/refs
-  // are read there too, not during render.
+  // external clock), never synchronously in the effect body — Date.now() is
+  // read there too, not during render. The deadline itself comes from the
+  // backend (SectionTiming.StartedAt + config.TimeLimitMinutes) and is stable
+  // across refresh — GetOrStartAsync never resets it — so this is a real
+  // countdown to a fixed instant, not a from-scratch client timer.
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
-  const sectionKey = section?.section
+  const deadlineUtc = section?.deadlineUtc
 
   useEffect(() => {
-    if (!section) return
-    const startedAt = Date.now()
-    const limitSeconds = (section.timeLimitMinutes ?? 0) * 60
+    if (!deadlineUtc) return
+    const deadline = new Date(deadlineUtc).getTime()
 
     const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startedAt) / 1000)
-      const remaining = Math.max(0, limitSeconds - elapsed)
+      const remaining = Math.max(0, Math.floor((deadline - Date.now()) / 1000))
       setSecondsLeft(remaining)
       if (remaining <= 0) {
         clearInterval(interval)
@@ -138,18 +139,20 @@ export function ExamSectionRunner() {
 
     return () => clearInterval(interval)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionKey])
+  }, [deadlineUtc])
 
   if (!section) {
     return <SectionSkeleton />
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" data-testid="exam-section-runner">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{sectionLabels[section.section as SectionType]}</h1>
         {secondsLeft !== null && (
-          <span className="font-mono text-lg tabular-nums">{formatTime(secondsLeft)}</span>
+          <span className="font-mono text-lg tabular-nums" data-testid="section-timer">
+            {formatTime(secondsLeft)}
+          </span>
         )}
       </div>
 

@@ -16,6 +16,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string
   onConfirm: () => void
   isPending?: boolean
+  testId?: string
 }
 
 export function ConfirmDialog({
@@ -26,16 +27,22 @@ export function ConfirmDialog({
   confirmLabel = 'Удалить',
   onConfirm,
   isPending,
+  testId = 'confirm-dialog',
 }: ConfirmDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent data-testid={testId}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         <DialogFooter showCloseButton>
-          <Button variant="destructive" onClick={onConfirm} disabled={isPending}>
+          <Button
+            variant="destructive"
+            onClick={onConfirm}
+            disabled={isPending}
+            data-testid={`${testId}-confirm`}
+          >
             {confirmLabel}
           </Button>
         </DialogFooter>

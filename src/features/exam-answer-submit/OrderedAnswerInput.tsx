@@ -41,9 +41,13 @@ export function OrderedAnswerInput({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" data-testid={`ordered-question-${question.id}`}>
       {order.map((option, index) => (
-        <div key={option.id} className="flex items-center gap-2 rounded-md border p-2">
+        <div
+          key={option.id}
+          className="flex items-center gap-2 rounded-md border p-2"
+          data-testid={`ordered-option-${option.id}`}
+        >
           <span className="flex-1 text-sm">{option.content}</span>
           <Button
             type="button"
@@ -52,6 +56,7 @@ export function OrderedAnswerInput({
             disabled={index === 0}
             onClick={() => move(index, -1)}
             aria-label="Переместить вверх"
+            data-testid={`ordered-option-${option.id}-up`}
           >
             <ArrowUpIcon className="size-3.5" />
           </Button>
@@ -62,6 +67,7 @@ export function OrderedAnswerInput({
             disabled={index === order.length - 1}
             onClick={() => move(index, 1)}
             aria-label="Переместить вниз"
+            data-testid={`ordered-option-${option.id}-down`}
           >
             <ArrowDownIcon className="size-3.5" />
           </Button>

@@ -29,10 +29,12 @@ export default function OrganizationsPage() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Организации</h1>
-        <Button onClick={openCreate}>Добавить организацию</Button>
+        <Button onClick={openCreate} data-testid="organization-create-button">
+          Добавить организацию
+        </Button>
       </div>
 
-      <Table>
+      <Table data-testid="organizations-table">
         <TableHeader>
           <TableRow>
             <TableHead>Краткое название</TableHead>
@@ -49,15 +51,25 @@ export default function OrganizationsPage() {
             </TableRow>
           )}
           {organizations.map((org) => (
-            <TableRow key={org.id}>
+            <TableRow key={org.id} data-testid={`organization-row-${org.id}`}>
               <TableCell>{org.shortName}</TableCell>
               <TableCell>{org.nameRu}</TableCell>
               <TableCell>{org.nameKg}</TableCell>
               <TableCell className="flex justify-end gap-2">
-                <Button variant="outline" size="sm" onClick={() => openEdit(org)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openEdit(org)}
+                  data-testid={`organization-row-${org.id}-edit`}
+                >
                   Изменить
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => setDeleting(org)}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setDeleting(org)}
+                  data-testid={`organization-row-${org.id}-delete`}
+                >
                   Удалить
                 </Button>
               </TableCell>

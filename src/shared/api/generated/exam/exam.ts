@@ -5,23 +5,34 @@
  * OpenAPI spec version: 1.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   CandidateResponseDto,
   ExamLoginDto,
   ExamSectionDto,
+  GetApiExamSectionStatusParams,
   ProblemDetails,
   ResultResponseDto,
   SaveAnswerDto,
   SectionRequestDto,
+  SectionStatusDto,
   StartExamRequestDto,
   StartExamResultDto,
   SubmitExamDto,
@@ -35,6 +46,21 @@ import { apiInstance } from '../../instance';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
+};
 
 export type postApiExamUnlockResponse200TextPlain = {
   data: string
@@ -429,7 +455,130 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getPostApiExamSectionStartMutationOptions(options), queryClient);
     }
-    export type postApiExamSectionSubmitResponse200TextPlain = {
+    export type getApiExamSectionStatusResponse200TextPlain = {
+  data: SectionStatusDto
+  status: 200
+}
+
+export type getApiExamSectionStatusResponse200ApplicationJson = {
+  data: SectionStatusDto
+  status: 200
+}
+
+export type getApiExamSectionStatusResponse200TextJson = {
+  data: SectionStatusDto
+  status: 200
+}
+
+export type getApiExamSectionStatusResponseSuccess = (getApiExamSectionStatusResponse200TextPlain | getApiExamSectionStatusResponse200ApplicationJson | getApiExamSectionStatusResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type getApiExamSectionStatusResponse = (getApiExamSectionStatusResponseSuccess)
+
+export const getGetApiExamSectionStatusUrl = (params?: GetApiExamSectionStatusParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/exam/section/status?${stringifiedParams}` : `/api/exam/section/status`
+}
+
+export const getApiExamSectionStatus = async (params?: GetApiExamSectionStatusParams, options?: RequestInit): Promise<getApiExamSectionStatusResponse> => {
+
+  return apiInstance<getApiExamSectionStatusResponse>(getGetApiExamSectionStatusUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetApiExamSectionStatusQueryKey = (params?: GetApiExamSectionStatusParams,) => {
+    return [
+    `/api/exam/section/status`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetApiExamSectionStatusQueryOptions = <TData = Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError = unknown>(params?: GetApiExamSectionStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiExamSectionStatusQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiExamSectionStatus>>> = ({ signal }) => getApiExamSectionStatus(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiExamSectionStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getApiExamSectionStatus>>>
+export type GetApiExamSectionStatusQueryError = unknown
+
+
+export function useGetApiExamSectionStatus<TData = Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError = unknown>(
+ params: undefined |  GetApiExamSectionStatusParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiExamSectionStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getApiExamSectionStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiExamSectionStatus<TData = Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError = unknown>(
+ params?: GetApiExamSectionStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiExamSectionStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getApiExamSectionStatus>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiExamSectionStatus<TData = Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError = unknown>(
+ params?: GetApiExamSectionStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiExamSectionStatus<TData = Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError = unknown>(
+ params?: GetApiExamSectionStatusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiExamSectionStatus>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiExamSectionStatusQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export type postApiExamSectionSubmitResponse200TextPlain = {
   data: SubmitSectionResultDto
   status: 200
 }

@@ -38,6 +38,7 @@ export function DeleteQuestionDialog({ open, onOpenChange, question }: DeleteQue
       description="Это действие необратимо."
       onConfirm={() => mutation.mutate({ id: question.id! })}
       isPending={mutation.isPending}
+      testId="delete-question-dialog"
     />
   )
 }

@@ -40,7 +40,9 @@ export default function QuestionsPage() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Вопросы</h1>
-        <Button onClick={openCreate}>Добавить вопрос</Button>
+        <Button onClick={openCreate} data-testid="question-create-button">
+          Добавить вопрос
+        </Button>
       </div>
 
       <div className="flex gap-3">
@@ -72,7 +74,7 @@ export default function QuestionsPage() {
         </Select>
       </div>
 
-      <Table>
+      <Table data-testid="questions-table">
         <TableHeader>
           <TableRow>
             <TableHead>Текст</TableHead>
@@ -90,16 +92,26 @@ export default function QuestionsPage() {
             </TableRow>
           )}
           {questions.map((question) => (
-            <TableRow key={question.id}>
+            <TableRow key={question.id} data-testid={`question-row-${question.id}`}>
               <TableCell className="max-w-xs truncate">{question.content}</TableCell>
               <TableCell>{sectionLabels[question.section!]}</TableCell>
               <TableCell>{languageLevelLabels[question.level!]}</TableCell>
               <TableCell>{questionTypeLabels[question.type!]}</TableCell>
               <TableCell className="flex justify-end gap-2">
-                <Button variant="outline" size="sm" onClick={() => openEdit(question)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openEdit(question)}
+                  data-testid={`question-row-${question.id}-edit`}
+                >
                   Изменить
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => setDeleting(question)}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setDeleting(question)}
+                  data-testid={`question-row-${question.id}-delete`}
+                >
                   Удалить
                 </Button>
               </TableCell>

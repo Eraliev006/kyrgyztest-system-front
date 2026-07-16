@@ -4,6 +4,7 @@ import type {
   ExamQuestionDto,
   ExamAnswerOptionDto,
   SubmitSectionResultDto,
+  ActiveAttemptDto,
 } from '@/shared/api/generated/kyrgyzTestAPI.schemas'
 import { QuestionType } from '@/shared/api/generated/kyrgyzTestAPI.schemas'
 
@@ -12,6 +13,7 @@ export type ExamSection = ExamSectionDto
 export type ExamQuestion = ExamQuestionDto
 export type ExamAnswerOption = ExamAnswerOptionDto
 export type SubmitSectionResult = SubmitSectionResultDto
+export type ActiveAttempt = ActiveAttemptDto
 
 export function isOrderedQuestion(type: QuestionType | undefined): boolean {
   return type === QuestionType.WordOrder || type === QuestionType.SentenceOrder

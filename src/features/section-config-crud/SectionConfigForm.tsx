@@ -102,7 +102,7 @@ export function SectionConfigForm({ open, onOpenChange, config }: SectionConfigF
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent data-testid="section-config-form">
         <DialogHeader>
           <DialogTitle>
             {isEditing ? 'Редактировать конфигурацию раздела' : 'Новая конфигурация раздела'}
@@ -132,7 +132,13 @@ export function SectionConfigForm({ open, onOpenChange, config }: SectionConfigF
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="timeLimitMinutes">Лимит времени (мин)</Label>
-            <Input id="timeLimitMinutes" type="number" min={1} {...register('timeLimitMinutes')} />
+            <Input
+              id="timeLimitMinutes"
+              type="number"
+              min={1}
+              data-testid="section-config-timeLimitMinutes-input"
+              {...register('timeLimitMinutes')}
+            />
             {errors.timeLimitMinutes && (
               <p className="text-sm text-destructive">{errors.timeLimitMinutes.message}</p>
             )}
@@ -140,23 +146,47 @@ export function SectionConfigForm({ open, onOpenChange, config }: SectionConfigF
           <div className="grid grid-cols-4 gap-3">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="a1Count">A1</Label>
-              <Input id="a1Count" type="number" min={0} {...register('a1Count')} />
+              <Input
+                id="a1Count"
+                type="number"
+                min={0}
+                data-testid="section-config-a1Count-input"
+                {...register('a1Count')}
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="a2Count">A2</Label>
-              <Input id="a2Count" type="number" min={0} {...register('a2Count')} />
+              <Input
+                id="a2Count"
+                type="number"
+                min={0}
+                data-testid="section-config-a2Count-input"
+                {...register('a2Count')}
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="b1Count">B1</Label>
-              <Input id="b1Count" type="number" min={0} {...register('b1Count')} />
+              <Input
+                id="b1Count"
+                type="number"
+                min={0}
+                data-testid="section-config-b1Count-input"
+                {...register('b1Count')}
+              />
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="b2Count">B2</Label>
-              <Input id="b2Count" type="number" min={0} {...register('b2Count')} />
+              <Input
+                id="b2Count"
+                type="number"
+                min={0}
+                data-testid="section-config-b2Count-input"
+                {...register('b2Count')}
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} data-testid="section-config-form-submit">
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
           </DialogFooter>

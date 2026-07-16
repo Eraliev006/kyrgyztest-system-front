@@ -45,10 +45,19 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex w-80 flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-80 flex-col gap-4"
+      data-testid="login-form"
+    >
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="login">Логин</Label>
-        <Input id="login" autoComplete="username" {...register('login')} />
+        <Input
+          id="login"
+          autoComplete="username"
+          data-testid="login-input"
+          {...register('login')}
+        />
         {errors.login && <p className="text-sm text-destructive">{errors.login.message}</p>}
       </div>
       <div className="flex flex-col gap-1.5">
@@ -57,11 +66,12 @@ export function LoginForm() {
           id="password"
           type="password"
           autoComplete="current-password"
+          data-testid="password-input"
           {...register('password')}
         />
         {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
       </div>
-      <Button type="submit" disabled={mutation.isPending}>
+      <Button type="submit" disabled={mutation.isPending} data-testid="login-submit">
         {mutation.isPending ? 'Вход...' : 'Войти'}
       </Button>
     </form>

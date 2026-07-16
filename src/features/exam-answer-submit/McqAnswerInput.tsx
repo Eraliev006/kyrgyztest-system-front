@@ -20,7 +20,7 @@ export function McqAnswerInput({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" data-testid={`mcq-question-${question.id}`}>
       {question.answerOptions?.map((option) => (
         <label
           key={option.id}
@@ -31,6 +31,7 @@ export function McqAnswerInput({
             name={`question-${question.id}`}
             checked={selected === option.id}
             onChange={() => select(option.id!)}
+            data-testid={`mcq-option-${option.id}`}
           />
           <span>{option.content}</span>
         </label>

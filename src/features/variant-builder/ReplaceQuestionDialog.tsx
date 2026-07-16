@@ -62,7 +62,10 @@ export function ReplaceQuestionDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent
+        className="max-h-[80vh] overflow-y-auto sm:max-w-lg"
+        data-testid="replace-question-dialog"
+      >
         <DialogHeader>
           <DialogTitle>Заменить вопрос</DialogTitle>
         </DialogHeader>
@@ -82,13 +85,18 @@ export function ReplaceQuestionDialog({
                 name="replacement"
                 checked={selectedId === candidate.id}
                 onChange={() => setSelectedId(candidate.id!)}
+                data-testid={`replace-question-option-${candidate.id}`}
               />
               <span className="text-sm">{candidate.content}</span>
             </label>
           ))}
         </div>
         <DialogFooter>
-          <Button onClick={onConfirm} disabled={!selectedId || mutation.isPending}>
+          <Button
+            onClick={onConfirm}
+            disabled={!selectedId || mutation.isPending}
+            data-testid="replace-question-confirm"
+          >
             Заменить
           </Button>
         </DialogFooter>

@@ -42,6 +42,7 @@ export function DeleteOrganizationDialog({
       description="Это действие необратимо."
       onConfirm={() => mutation.mutate({ id: organization.id! })}
       isPending={mutation.isPending}
+      testId="delete-organization-dialog"
     />
   )
 }

@@ -13,6 +13,7 @@ import { useGetApiOrganizations } from '@/shared/api/generated/organization/orga
 import type { Candidate } from '@/entities/candidate'
 import { ApiError } from '@/shared/api/instance'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
+import { CandidatePhotoUpload } from './CandidatePhotoUpload'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
@@ -95,21 +96,28 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent data-testid="candidate-form">
         <DialogHeader>
           <DialogTitle>{isEditing ? 'Редактировать кандидата' : 'Новый кандидат'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          data-testid="candidate-form-body"
+        >
+          {isEditing && (
+            <CandidatePhotoUpload candidateId={candidate.id!} photo={candidate.photo} />
+          )}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="fullName">ФИО</Label>
-            <Input id="fullName" {...register('fullName')} />
+            <Input id="fullName" data-testid="candidate-fullName-input" {...register('fullName')} />
             {errors.fullName && (
               <p className="text-sm text-destructive">{errors.fullName.message}</p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="inn">ИНН</Label>
-            <Input id="inn" {...register('inn')} />
+            <Input id="inn" data-testid="candidate-inn-input" {...register('inn')} />
             {errors.inn && <p className="text-sm text-destructive">{errors.inn.message}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -134,7 +142,7 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
             />
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} data-testid="candidate-form-submit">
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
           </DialogFooter>

@@ -39,13 +39,23 @@ export function KioskUnlockForm({ onUnlocked }: { onUnlocked: () => void }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex w-80 flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-80 flex-col gap-4"
+      data-testid="kiosk-unlock-form"
+    >
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="password">Пароль экзаменационной комнаты</Label>
-        <Input id="password" type="password" {...register('password')} autoFocus />
+        <Input
+          id="password"
+          type="password"
+          data-testid="kiosk-password-input"
+          {...register('password')}
+          autoFocus
+        />
         {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
       </div>
-      <Button type="submit" disabled={mutation.isPending}>
+      <Button type="submit" disabled={mutation.isPending} data-testid="kiosk-unlock-submit">
         {mutation.isPending ? 'Проверка...' : 'Разблокировать'}
       </Button>
     </form>

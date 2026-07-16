@@ -99,14 +99,18 @@ export function TopicForm({ open, onOpenChange, topic }: TopicFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent data-testid="topic-form">
         <DialogHeader>
           <DialogTitle>{isEditing ? 'Редактировать тему' : 'Новая тема'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          data-testid="topic-form-body"
+        >
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="name">Название</Label>
-            <Input id="name" {...register('name')} />
+            <Input id="name" data-testid="topic-name-input" {...register('name')} />
             {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -132,7 +136,7 @@ export function TopicForm({ open, onOpenChange, topic }: TopicFormProps) {
             />
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} data-testid="topic-form-submit">
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
           </DialogFooter>

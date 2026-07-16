@@ -199,7 +199,10 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent
+        className="max-h-[90vh] overflow-y-auto sm:max-w-lg"
+        data-testid="question-form"
+      >
         <DialogHeader>
           <DialogTitle>{isEditing ? 'Редактировать вопрос' : 'Новый вопрос'}</DialogTitle>
         </DialogHeader>
@@ -278,7 +281,7 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="content">Текст вопроса</Label>
-            <Input id="content" {...register('content')} />
+            <Input id="content" data-testid="question-content-input" {...register('content')} />
             {errors.content && <p className="text-sm text-destructive">{errors.content.message}</p>}
           </div>
 
@@ -355,12 +358,17 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
                 variant="outline"
                 size="sm"
                 onClick={() => append({ content: '' })}
+                data-testid="question-add-option"
               >
                 <PlusIcon className="size-3.5" /> Добавить
               </Button>
             </div>
             {fields.map((field, index) => (
-              <div key={field.id} className="flex items-center gap-2">
+              <div
+                key={field.id}
+                className="flex items-center gap-2"
+                data-testid={`question-option-${index}`}
+              >
                 {type === QuestionType.MCQ && (
                   <input
                     type="radio"
@@ -368,9 +376,14 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
                     checked={correctIndex === index}
                     onChange={() => setValue('correctIndex', index)}
                     aria-label={`Правильный вариант ${index + 1}`}
+                    data-testid={`question-option-${index}-correct-radio`}
                   />
                 )}
-                <Input {...register(`answerOptions.${index}.content`)} className="flex-1" />
+                <Input
+                  {...register(`answerOptions.${index}.content`)}
+                  className="flex-1"
+                  data-testid={`question-option-${index}-content`}
+                />
                 {ordered && (
                   <>
                     <Button
@@ -399,6 +412,7 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
                   size="icon-sm"
                   disabled={fields.length <= 1}
                   onClick={() => remove(index)}
+                  data-testid={`question-option-${index}-remove`}
                 >
                   <TrashIcon className="size-3.5" />
                 </Button>
@@ -413,7 +427,7 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
           </div>
 
           <DialogFooter>
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} data-testid="question-form-submit">
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
           </DialogFooter>

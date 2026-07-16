@@ -37,14 +37,23 @@ export function VariantDetail({ variantId }: { variantId: string }) {
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             {questions?.map((question) => (
-              <div key={question.id} className="flex items-center justify-between gap-2">
+              <div
+                key={question.id}
+                className="flex items-center justify-between gap-2"
+                data-testid={`variant-question-${question.id}`}
+              >
                 <span className="text-sm">
                   {question.content}{' '}
                   <span className="text-muted-foreground">
                     ({question.level}, {question.type})
                   </span>
                 </span>
-                <Button variant="outline" size="sm" onClick={() => setReplacing(question ?? null)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setReplacing(question ?? null)}
+                  data-testid={`variant-question-${question.id}-replace`}
+                >
                   Заменить
                 </Button>
               </div>

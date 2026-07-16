@@ -24,6 +24,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ActiveAttemptDto,
   BlockCandidateDto,
   CandidateResponseDto,
   CandidateResponseDtoPagedResultDto,
@@ -56,6 +57,122 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   }
   return result;
 };
+
+export type getApiCandidatesActiveAttemptsResponse200TextPlain = {
+  data: ActiveAttemptDto[]
+  status: 200
+}
+
+export type getApiCandidatesActiveAttemptsResponse200ApplicationJson = {
+  data: ActiveAttemptDto[]
+  status: 200
+}
+
+export type getApiCandidatesActiveAttemptsResponse200TextJson = {
+  data: ActiveAttemptDto[]
+  status: 200
+}
+
+export type getApiCandidatesActiveAttemptsResponseSuccess = (getApiCandidatesActiveAttemptsResponse200TextPlain | getApiCandidatesActiveAttemptsResponse200ApplicationJson | getApiCandidatesActiveAttemptsResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type getApiCandidatesActiveAttemptsResponse = (getApiCandidatesActiveAttemptsResponseSuccess)
+
+export const getGetApiCandidatesActiveAttemptsUrl = () => {
+
+
+
+
+  return `/api/candidates/active-attempts`
+}
+
+export const getApiCandidatesActiveAttempts = async ( options?: RequestInit): Promise<getApiCandidatesActiveAttemptsResponse> => {
+
+  return apiInstance<getApiCandidatesActiveAttemptsResponse>(getGetApiCandidatesActiveAttemptsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetApiCandidatesActiveAttemptsQueryKey = () => {
+    return [
+    `/api/candidates/active-attempts`
+    ] as const;
+    }
+
+
+export const getGetApiCandidatesActiveAttemptsQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiCandidatesActiveAttemptsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>> = ({ signal }) => getApiCandidatesActiveAttempts({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiCandidatesActiveAttemptsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>>
+export type GetApiCandidatesActiveAttemptsQueryError = unknown
+
+
+export function useGetApiCandidatesActiveAttempts<TData = Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>,
+          TError,
+          Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiCandidatesActiveAttempts<TData = Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>,
+          TError,
+          Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiCandidatesActiveAttempts<TData = Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiCandidatesActiveAttempts<TData = Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesActiveAttempts>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetApiCandidatesActiveAttemptsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
 
 export type getApiCandidatesResponse200TextPlain = {
   data: CandidateResponseDtoPagedResultDto

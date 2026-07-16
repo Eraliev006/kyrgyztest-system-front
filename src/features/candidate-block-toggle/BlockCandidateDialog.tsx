@@ -67,7 +67,7 @@ export function BlockCandidateDialog({ open, onOpenChange, candidate }: BlockCan
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent data-testid="block-candidate-dialog">
         <DialogHeader>
           <DialogTitle>Заблокировать кандидата «{candidate.fullName}»</DialogTitle>
         </DialogHeader>
@@ -75,7 +75,13 @@ export function BlockCandidateDialog({ open, onOpenChange, candidate }: BlockCan
           <div className="flex gap-3">
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="value">Срок</Label>
-              <Input id="value" type="number" min={1} {...register('value')} />
+              <Input
+                id="value"
+                type="number"
+                min={1}
+                data-testid="block-value-input"
+                {...register('value')}
+              />
               {errors.value && <p className="text-sm text-destructive">{errors.value.message}</p>}
             </div>
             <div className="flex flex-1 flex-col gap-1.5">
@@ -101,7 +107,12 @@ export function BlockCandidateDialog({ open, onOpenChange, candidate }: BlockCan
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" variant="destructive" disabled={mutation.isPending}>
+            <Button
+              type="submit"
+              variant="destructive"
+              disabled={mutation.isPending}
+              data-testid="block-candidate-confirm"
+            >
               Заблокировать
             </Button>
           </DialogFooter>

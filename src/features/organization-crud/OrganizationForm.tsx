@@ -89,30 +89,38 @@ export function OrganizationForm({ open, onOpenChange, organization }: Organizat
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent data-testid="organization-form">
         <DialogHeader>
           <DialogTitle>{isEditing ? 'Редактировать организацию' : 'Новая организация'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          data-testid="organization-form-body"
+        >
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="nameRu">Название (рус.)</Label>
-            <Input id="nameRu" {...register('nameRu')} />
+            <Input id="nameRu" data-testid="organization-nameRu-input" {...register('nameRu')} />
             {errors.nameRu && <p className="text-sm text-destructive">{errors.nameRu.message}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="nameKg">Название (кырг.)</Label>
-            <Input id="nameKg" {...register('nameKg')} />
+            <Input id="nameKg" data-testid="organization-nameKg-input" {...register('nameKg')} />
             {errors.nameKg && <p className="text-sm text-destructive">{errors.nameKg.message}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="shortName">Краткое название</Label>
-            <Input id="shortName" {...register('shortName')} />
+            <Input
+              id="shortName"
+              data-testid="organization-shortName-input"
+              {...register('shortName')}
+            />
             {errors.shortName && (
               <p className="text-sm text-destructive">{errors.shortName.message}</p>
             )}
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" disabled={isPending} data-testid="organization-form-submit">
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
           </DialogFooter>

@@ -45,6 +45,7 @@ export function CandidateAccessActions({ candidate }: { candidate: Candidate }) 
           size="sm"
           onClick={() => allowMutation.mutate({ id: candidate.id! })}
           disabled={allowMutation.isPending}
+          data-testid={`candidate-${candidate.id}-unblock`}
         >
           Разблокировать
         </Button>
@@ -54,6 +55,7 @@ export function CandidateAccessActions({ candidate }: { candidate: Candidate }) 
           size="sm"
           onClick={() => denyMutation.mutate({ id: candidate.id! })}
           disabled={denyMutation.isPending}
+          data-testid={`candidate-${candidate.id}-deny`}
         >
           Закрыть доступ
         </Button>
@@ -63,11 +65,17 @@ export function CandidateAccessActions({ candidate }: { candidate: Candidate }) 
           size="sm"
           onClick={() => allowMutation.mutate({ id: candidate.id! })}
           disabled={allowMutation.isPending}
+          data-testid={`candidate-${candidate.id}-allow`}
         >
           Открыть доступ
         </Button>
       )}
-      <Button variant="destructive" size="sm" onClick={() => setBlockDialogOpen(true)}>
+      <Button
+        variant="destructive"
+        size="sm"
+        onClick={() => setBlockDialogOpen(true)}
+        data-testid={`candidate-${candidate.id}-block`}
+      >
         Заблокировать
       </Button>
       <BlockCandidateDialog

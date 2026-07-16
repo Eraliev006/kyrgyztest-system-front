@@ -35,6 +35,7 @@ export function DeleteTopicDialog({ open, onOpenChange, topic }: DeleteTopicDial
       description="Это действие необратимо."
       onConfirm={() => mutation.mutate({ id: topic.id! })}
       isPending={mutation.isPending}
+      testId="delete-topic-dialog"
     />
   )
 }

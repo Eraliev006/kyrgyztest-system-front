@@ -29,7 +29,7 @@ export default function VariantsPage() {
           Варианты собираются автоматически при старте попытки кандидата — здесь можно только
           просмотреть состав и заменить отдельный вопрос.
         </p>
-        <Table>
+        <Table data-testid="variants-table">
           <TableHeader>
             <TableRow>
               <TableHead>Номер</TableHead>
@@ -46,7 +46,7 @@ export default function VariantsPage() {
               </TableRow>
             )}
             {variants.map((variant) => (
-              <TableRow key={variant.id}>
+              <TableRow key={variant.id} data-testid={`variant-row-${variant.id}`}>
                 <TableCell>№{variant.number}</TableCell>
                 <TableCell>{new Date(variant.generatedAt!).toLocaleString('ru-RU')}</TableCell>
                 <TableCell>{variant.questionCount}</TableCell>
@@ -55,6 +55,7 @@ export default function VariantsPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => setSelectedVariantId(variant.id!)}
+                    data-testid={`variant-row-${variant.id}-open`}
                   >
                     Открыть
                   </Button>
@@ -75,6 +76,7 @@ export default function VariantsPage() {
               setEditingConfig(undefined)
               setConfigFormOpen(true)
             }}
+            data-testid="section-config-create-button"
           >
             Добавить конфигурацию
           </Button>
@@ -82,7 +84,7 @@ export default function VariantsPage() {
         <p className="text-sm text-muted-foreground">
           Определяет, сколько вопросов каждого уровня попадает в раздел при генерации варианта.
         </p>
-        <Table>
+        <Table data-testid="section-configs-table">
           <TableHeader>
             <TableRow>
               <TableHead>Раздел</TableHead>
@@ -102,7 +104,7 @@ export default function VariantsPage() {
               </TableRow>
             )}
             {configs.map((config) => (
-              <TableRow key={config.id}>
+              <TableRow key={config.id} data-testid={`section-config-row-${config.id}`}>
                 <TableCell>{sectionLabels[config.section!]}</TableCell>
                 <TableCell>{config.timeLimitMinutes} мин</TableCell>
                 <TableCell>{config.a1Count}</TableCell>
@@ -117,10 +119,16 @@ export default function VariantsPage() {
                       setEditingConfig(config)
                       setConfigFormOpen(true)
                     }}
+                    data-testid={`section-config-row-${config.id}-edit`}
                   >
                     Изменить
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={() => setDeletingConfig(config)}>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setDeletingConfig(config)}
+                    data-testid={`section-config-row-${config.id}-delete`}
+                  >
                     Удалить
                   </Button>
                 </TableCell>

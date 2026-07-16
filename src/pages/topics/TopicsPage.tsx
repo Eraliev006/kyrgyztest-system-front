@@ -37,7 +37,9 @@ export default function TopicsPage() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Темы</h1>
-        <Button onClick={openCreate}>Добавить тему</Button>
+        <Button onClick={openCreate} data-testid="topic-create-button">
+          Добавить тему
+        </Button>
       </div>
 
       <Select value={section} onValueChange={(value) => setSection(value ?? ALL_SECTIONS)}>
@@ -54,7 +56,7 @@ export default function TopicsPage() {
         </SelectContent>
       </Select>
 
-      <Table>
+      <Table data-testid="topics-table">
         <TableHeader>
           <TableRow>
             <TableHead>Название</TableHead>
@@ -70,14 +72,24 @@ export default function TopicsPage() {
             </TableRow>
           )}
           {topics.map((topic) => (
-            <TableRow key={topic.id}>
+            <TableRow key={topic.id} data-testid={`topic-row-${topic.id}`}>
               <TableCell>{topic.name}</TableCell>
               <TableCell>{topic.sectionType ? sectionLabels[topic.sectionType] : '—'}</TableCell>
               <TableCell className="flex justify-end gap-2">
-                <Button variant="outline" size="sm" onClick={() => openEdit(topic)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openEdit(topic)}
+                  data-testid={`topic-row-${topic.id}-edit`}
+                >
                   Изменить
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => setDeleting(topic)}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setDeleting(topic)}
+                  data-testid={`topic-row-${topic.id}-delete`}
+                >
                   Удалить
                 </Button>
               </TableCell>

@@ -60,15 +60,24 @@ export function AccessCodeLoginForm() {
   const isPending = loginMutation.isPending || startMutation.isPending || isStarting
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex w-80 flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-80 flex-col gap-4"
+      data-testid="access-code-form"
+    >
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="accessCode">Код доступа</Label>
-        <Input id="accessCode" {...register('accessCode')} autoFocus />
+        <Input
+          id="accessCode"
+          data-testid="access-code-input"
+          {...register('accessCode')}
+          autoFocus
+        />
         {errors.accessCode && (
           <p className="text-sm text-destructive">{errors.accessCode.message}</p>
         )}
       </div>
-      <Button type="submit" disabled={isPending}>
+      <Button type="submit" disabled={isPending} data-testid="access-code-submit">
         {isPending ? 'Вход...' : 'Начать тест'}
       </Button>
     </form>
