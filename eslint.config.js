@@ -18,7 +18,7 @@ const fsdLayers = [
 const sameSlice = { slice: '{{ from.element.captured.slice }}' }
 
 export default tseslint.config(
-  { ignores: ['dist', 'src/shared/api/generated'] },
+  { ignores: ['dist', 'src/shared/api/generated', 'qa'] },
   js.configs.recommended,
   tseslint.configs.recommended,
   {

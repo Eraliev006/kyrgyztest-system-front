@@ -1,13 +1,29 @@
 import { Outlet } from 'react-router-dom'
+import { ClipboardCheck } from 'lucide-react'
+import { Sidebar, type SidebarLink } from '@/widgets/sidebar/Sidebar'
+import { Header } from '@/widgets/header/Header'
 
-// Sidebar widget lands in a later epic — this is the routing/guard skeleton for Ф-1.
+const links: SidebarLink[] = [
+  {
+    to: '/examiner/queue',
+    label: 'Очередь на проверку',
+    icon: ClipboardCheck,
+    testId: 'nav-examiner-queue',
+  },
+]
+
 export function ExaminerLayout() {
   return (
     <div className="flex min-h-svh">
-      <aside className="w-60 shrink-0 border-r" />
-      <main className="flex-1 p-6">
-        <Outlet />
-      </main>
+      <Sidebar title="Кабинет экзаменатора" links={links} testId="examiner-sidebar" />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="shrink-0 border-b">
+          <Header />
+        </header>
+        <main className="flex-1 p-6">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

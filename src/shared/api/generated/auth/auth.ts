@@ -15,6 +15,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ChangePasswordDto,
   LoginDto,
   LoginResponseDto
 } from '../kyrgyzTestAPI.schemas';
@@ -111,4 +112,80 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         TContext
       > => {
       return useMutation(getPostApiAuthLoginMutationOptions(options), queryClient);
+    }
+    export type putApiAuthChangePasswordResponse204 = {
+  data: void
+  status: 204
+}
+
+export type putApiAuthChangePasswordResponseSuccess = (putApiAuthChangePasswordResponse204) & {
+  headers: Headers;
+};
+;
+
+export type putApiAuthChangePasswordResponse = (putApiAuthChangePasswordResponseSuccess)
+
+export const getPutApiAuthChangePasswordUrl = () => {
+
+
+
+
+  return `/api/auth/change-password`
+}
+
+export const putApiAuthChangePassword = async (changePasswordDto?: ChangePasswordDto, options?: RequestInit): Promise<putApiAuthChangePasswordResponse> => {
+
+  return apiInstance<putApiAuthChangePasswordResponse>(getPutApiAuthChangePasswordUrl(),
+  {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(changePasswordDto)
+  }
+);}
+
+
+
+
+
+export const getPutApiAuthChangePasswordMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAuthChangePassword>>, TError,{data?: ChangePasswordDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putApiAuthChangePassword>>, TError,{data?: ChangePasswordDto}, TContext> => {
+
+const mutationKey = ['putApiAuthChangePassword'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiAuthChangePassword>>, {data?: ChangePasswordDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  putApiAuthChangePassword(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutApiAuthChangePasswordMutationResult = NonNullable<Awaited<ReturnType<typeof putApiAuthChangePassword>>>
+    export type PutApiAuthChangePasswordMutationBody = ChangePasswordDto | undefined
+    export type PutApiAuthChangePasswordMutationError = unknown
+
+    export const usePutApiAuthChangePassword = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putApiAuthChangePassword>>, TError,{data?: ChangePasswordDto}, TContext>, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putApiAuthChangePassword>>,
+        TError,
+        {data?: ChangePasswordDto},
+        TContext
+      > => {
+      return useMutation(getPutApiAuthChangePasswordMutationOptions(options), queryClient);
     }

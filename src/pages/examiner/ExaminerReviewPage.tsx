@@ -1,6 +1,10 @@
 import { useParams } from 'react-router-dom'
+import { ExaminerReviewPanel } from '@/widgets/examiner-review-panel/ExaminerReviewPanel'
 
 export default function ExaminerReviewPage() {
   const { attemptId } = useParams<{ attemptId: string }>()
-  return <h1 className="text-2xl font-semibold">Проверка попытки {attemptId}</h1>
+
+  if (!attemptId) return null
+
+  return <ExaminerReviewPanel attemptId={attemptId} />
 }

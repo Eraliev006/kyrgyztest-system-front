@@ -3,13 +3,24 @@ import { useGetApiOrganizations } from '@/shared/api/generated/organization/orga
 import type { Organization } from '@/entities/organization'
 import { OrganizationForm } from '@/features/organization-crud/OrganizationForm'
 import { DeleteOrganizationDialog } from '@/features/organization-crud/DeleteOrganizationDialog'
+import { useDebouncedValue } from '@/shared/lib/use-debounced-value'
 import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
 import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 
 export default function OrganizationsPage() {
   const { data: response, isLoading } = useGetApiOrganizations()
-  const organizations = response?.data ?? []
+  const allOrganizations = response?.data ?? []
+
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebouncedValue(search, 300)
+  const query = debouncedSearch.trim().toLowerCase()
+  const organizations = query
+    ? allOrganizations.filter((org) =>
+        [org.shortName, org.nameRu, org.nameKg].some((name) => name?.toLowerCase().includes(query)),
+      )
+    : allOrganizations
 
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<Organization | undefined>(undefined)
@@ -34,6 +45,14 @@ export default function OrganizationsPage() {
         </Button>
       </div>
 
+      <Input
+        placeholder="Поиск по названию организации..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="max-w-sm"
+        data-testid="organizations-search"
+      />
+
       <Table data-testid="organizations-table">
         <TableHeader>
           <TableRow>
@@ -47,7 +66,9 @@ export default function OrganizationsPage() {
           {isLoading && <TableSkeletonRows columns={4} />}
           {!isLoading && organizations.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4}>Организаций пока нет</TableCell>
+              <TableCell colSpan={4}>
+                {query ? 'Ничего не найдено' : 'Организаций пока нет'}
+              </TableCell>
             </TableRow>
           )}
           {organizations.map((org) => (

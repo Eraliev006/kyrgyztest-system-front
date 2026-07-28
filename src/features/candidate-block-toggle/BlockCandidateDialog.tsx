@@ -90,7 +90,7 @@ export function BlockCandidateDialog({ open, onOpenChange, candidate }: BlockCan
                 control={control}
                 name="unit"
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select items={unitLabels} value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

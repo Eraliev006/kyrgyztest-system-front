@@ -13,7 +13,6 @@ import { useGetApiOrganizations } from '@/shared/api/generated/organization/orga
 import type { Candidate } from '@/entities/candidate'
 import { ApiError } from '@/shared/api/instance'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
-import { CandidatePhotoUpload } from './CandidatePhotoUpload'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
@@ -105,9 +104,6 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
           className="flex flex-col gap-4"
           data-testid="candidate-form-body"
         >
-          {isEditing && (
-            <CandidatePhotoUpload candidateId={candidate.id!} photo={candidate.photo} />
-          )}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="fullName">ФИО</Label>
             <Input id="fullName" data-testid="candidate-fullName-input" {...register('fullName')} />
@@ -126,7 +122,11 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
               control={control}
               name="organizationId"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  items={Object.fromEntries(organizations.map((org) => [org.id!, org.shortName!]))}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Без организации" />
                   </SelectTrigger>

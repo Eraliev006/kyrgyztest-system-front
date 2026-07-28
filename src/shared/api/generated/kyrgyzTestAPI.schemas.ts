@@ -53,6 +53,7 @@ export const QuestionType = {
   MCQ: 'MCQ',
   WordOrder: 'WordOrder',
   SentenceOrder: 'SentenceOrder',
+  OpenAnswer: 'OpenAnswer',
 } as const;
 
 export interface AttemptAnswerDetailDto {
@@ -66,6 +67,10 @@ export interface AttemptAnswerDetailDto {
   selectedOptionId?: string | null;
   /** @nullable */
   orderedAnswer?: string | null;
+  /** @nullable */
+  audioAnswerUrl?: string | null;
+  /** @nullable */
+  manualScore?: number | null;
   isCorrect?: boolean;
   /** @nullable */
   correctOptionId?: string | null;
@@ -123,6 +128,13 @@ export interface CandidateResponseDtoPagedResultDto {
   totalCount?: number;
   page?: number;
   pageSize?: number;
+}
+
+export interface ChangePasswordDto {
+  /** @nullable */
+  currentPassword?: string | null;
+  /** @nullable */
+  newPassword?: string | null;
 }
 
 export interface CreateAnswerOptionDto {
@@ -232,6 +244,12 @@ export interface ExamQuestionDto {
   type?: QuestionType;
   /** @nullable */
   answerOptions?: ExamAnswerOptionDto[] | null;
+  /** @nullable */
+  selectedOptionId?: string | null;
+  /** @nullable */
+  orderedAnswer?: string | null;
+  /** @nullable */
+  audioAnswerUrl?: string | null;
 }
 
 export interface ExamSectionDto {
@@ -242,6 +260,39 @@ export interface ExamSectionDto {
   deadlineUtc?: string | null;
   /** @nullable */
   questions?: ExamQuestionDto[] | null;
+}
+
+export interface ExaminerAnswerDto {
+  questionId?: string;
+  /** @nullable */
+  content?: string | null;
+  /** @nullable */
+  audioAnswerUrl?: string | null;
+  /** @nullable */
+  score?: number | null;
+}
+
+export interface ExaminerQueueItemDto {
+  attemptId?: string;
+  candidateId?: string;
+  /** @nullable */
+  candidateFullName?: string | null;
+  submittedAt?: string;
+  ungradedCount?: number;
+}
+
+export interface ExaminerReviewDto {
+  attemptId?: string;
+  /** @nullable */
+  candidateFullName?: string | null;
+  /** @nullable */
+  answers?: ExaminerAnswerDto[] | null;
+}
+
+export interface GradeAnswerDto {
+  attemptId?: string;
+  questionId?: string;
+  score?: number;
 }
 
 export interface LoginDto {
@@ -291,6 +342,27 @@ export interface OrganizationDto {
   shortName?: string | null;
 }
 
+export type PasswordResetStatus = typeof PasswordResetStatus[keyof typeof PasswordResetStatus];
+
+
+export const PasswordResetStatus = {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  Rejected: 'Rejected',
+} as const;
+
+export interface PasswordResetRequestResponseDto {
+  id?: string;
+  userId?: string;
+  /** @nullable */
+  userFullName?: string | null;
+  /** @nullable */
+  userLogin?: string | null;
+  userRole?: UserRole;
+  status?: PasswordResetStatus;
+  requestedAt?: string;
+}
+
 export interface ProblemDetails {
   /** @nullable */
   type?: string | null;
@@ -325,10 +397,18 @@ export interface QuestionResponseDto {
   /** @nullable */
   answerOptions?: AnswerOptionResponseDto[] | null;
   createdAt?: string;
+  usedInVariantCount?: number;
 }
 
 export interface ReplaceQuestionDto {
   newQuestionId?: string;
+}
+
+export interface RequestPasswordResetDto {
+  /** @nullable */
+  login?: string | null;
+  /** @nullable */
+  newPassword?: string | null;
 }
 
 export interface ResultResponseDto {
@@ -340,6 +420,7 @@ export interface ResultResponseDto {
   listeningScore?: number;
   readingScore?: number;
   writingScore?: number;
+  speakingScore?: number;
   totalScore?: number;
   createdAt?: string;
 }
@@ -361,7 +442,9 @@ export interface ResultWithCandidateDto {
   listeningScore?: number;
   readingScore?: number;
   writingScore?: number;
+  speakingScore?: number;
   totalScore?: number;
+  startedAt?: string;
   createdAt?: string;
 }
 
@@ -372,6 +455,8 @@ export interface SaveAnswerDto {
   selectedOptionId?: string | null;
   /** @nullable */
   orderedAnswer?: string | null;
+  /** @nullable */
+  audioAnswerUrl?: string | null;
 }
 
 export interface SectionConfigResponseDto {
@@ -443,6 +528,7 @@ export interface TestVariantSummaryDto {
   number?: number;
   generatedAt?: string;
   questionCount?: number;
+  isArchived?: boolean;
 }
 
 export interface TopicDto {
@@ -464,6 +550,11 @@ export interface UpdateCandidateDto {
   inn?: string | null;
   /** @nullable */
   organizationId?: string | null;
+}
+
+export interface UploadAudioResponseDto {
+  /** @nullable */
+  url?: string | null;
 }
 
 export interface UploadPhotoDto {
@@ -507,6 +598,12 @@ attemptId?: string;
 section?: SectionType;
 };
 
+export type PostApiExamAnswerAudioBody = {
+  attemptId?: string;
+  questionId?: string;
+  file?: Blob;
+};
+
 export type PostApiFilesAudioBody = {
   file?: Blob;
 };
@@ -527,6 +624,10 @@ export type GetApiResultsStatsParams = {
 organizationId?: string;
 dateFrom?: string;
 dateTo?: string;
+};
+
+export type GetApiVariantsParams = {
+includeArchived?: boolean;
 };
 
 export type GetApiVariantsIdAvailableQuestionsParams = {

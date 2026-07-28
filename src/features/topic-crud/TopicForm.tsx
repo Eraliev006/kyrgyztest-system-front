@@ -119,7 +119,11 @@ export function TopicForm({ open, onOpenChange, topic }: TopicFormProps) {
               control={control}
               name="sectionType"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  items={{ [NO_SECTION]: 'Без раздела', ...sectionLabels }}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

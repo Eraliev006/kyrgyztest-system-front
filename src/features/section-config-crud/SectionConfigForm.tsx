@@ -115,7 +115,12 @@ export function SectionConfigForm({ open, onOpenChange, config }: SectionConfigF
               control={control}
               name="section"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange} disabled={isEditing}>
+                <Select
+                  items={sectionLabels}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isEditing}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

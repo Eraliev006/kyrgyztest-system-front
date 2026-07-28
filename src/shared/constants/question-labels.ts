@@ -4,6 +4,7 @@ export const questionTypeLabels: Record<QuestionType, string> = {
   [QuestionType.MCQ]: 'Один правильный ответ',
   [QuestionType.WordOrder]: 'Порядок слов',
   [QuestionType.SentenceOrder]: 'Порядок предложений',
+  [QuestionType.OpenAnswer]: 'Открытый ответ (Speaking, проверяется вручную)',
 }
 
 export const languageLevelLabels: Record<LanguageLevel, string> = {

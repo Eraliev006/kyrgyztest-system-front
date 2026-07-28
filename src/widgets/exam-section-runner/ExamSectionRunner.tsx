@@ -9,13 +9,22 @@ import {
 } from '@/shared/api/generated/exam/exam'
 import { SectionType } from '@/shared/api/generated/kyrgyzTestAPI.schemas'
 import { sectionLabels } from '@/shared/constants/section-labels'
-import { findCurrentSection, isOrderedQuestion, type ExamSection } from '@/entities/attempt'
+import { questionTypeLabels } from '@/shared/constants/question-labels'
+import {
+  findCurrentSection,
+  isOpenAnswerQuestion,
+  isOrderedQuestion,
+  type ExamSection,
+} from '@/entities/attempt'
 import { getAttemptId, getCandidateId } from '@/shared/lib/attempt-session'
 import { ApiError } from '@/shared/api/instance'
+import { AudioAnswerInput } from '@/features/exam-answer-submit/AudioAnswerInput'
 import { McqAnswerInput } from '@/features/exam-answer-submit/McqAnswerInput'
 import { OrderedAnswerInput } from '@/features/exam-answer-submit/OrderedAnswerInput'
 import { SubmitSectionButton } from '@/features/exam-section-submit/SubmitSectionButton'
+import { Button } from '@/shared/ui/button'
 import { Skeleton } from '@/shared/ui/skeleton'
+import { cn } from '@/shared/lib/utils'
 
 type Resolved =
   | { kind: 'redirect'; section: SectionType }
@@ -28,6 +37,14 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
+function questionAnsweredOnLoad(q: {
+  selectedOptionId?: string | null
+  orderedAnswer?: string | null
+  audioAnswerUrl?: string | null
+}): boolean {
+  return !!(q.selectedOptionId || q.orderedAnswer || q.audioAnswerUrl)
+}
+
 function SectionSkeleton() {
   return (
     <div className="flex flex-col gap-6">
@@ -35,15 +52,11 @@ function SectionSkeleton() {
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-8 w-16" />
       </div>
-      <div className="flex flex-col gap-6">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="flex flex-col gap-2 rounded-md border p-4">
-            <Skeleton className="h-5 w-3/4" />
-            <Skeleton className="h-9 w-full" />
-            <Skeleton className="h-9 w-full" />
-            <Skeleton className="h-9 w-2/3" />
-          </div>
-        ))}
+      <div className="flex flex-col gap-2 rounded-md border p-4">
+        <Skeleton className="h-5 w-3/4" />
+        <Skeleton className="h-9 w-full" />
+        <Skeleton className="h-9 w-full" />
+        <Skeleton className="h-9 w-2/3" />
       </div>
     </div>
   )
@@ -73,20 +86,14 @@ export function ExamSectionRunner() {
     },
   })
 
-  // Navigation is a side effect of query data, not component state — react-router's
-  // navigate() isn't a setState call, so this doesn't hit the same set-state-in-effect
-  // concern as fetching would.
   useEffect(() => {
     if (query.data?.kind === 'redirect') {
       navigate(`/exam/section/${query.data.section}`, { replace: true })
     } else if (query.data?.kind === 'finished') {
-      // Don't clear the attempt session here — ExamFinishPage is behind
-      // ExamAttemptGuard, which checks for it. Cleared when the candidate leaves.
       navigate('/exam/finish', { replace: true })
     }
   }, [query.data, navigate])
 
-  // Hard navigation lock: warn on refresh/close while a section is in progress.
   useEffect(() => {
     function onBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault()
@@ -115,12 +122,6 @@ export function ExamSectionRunner() {
     )
   }
 
-  // setState only ever happens inside the interval callback (subscribing to an
-  // external clock), never synchronously in the effect body — Date.now() is
-  // read there too, not during render. The deadline itself comes from the
-  // backend (SectionTiming.StartedAt + config.TimeLimitMinutes) and is stable
-  // across refresh — GetOrStartAsync never resets it — so this is a real
-  // countdown to a fixed instant, not a from-scratch client timer.
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null)
   const deadlineUtc = section?.deadlineUtc
 
@@ -142,34 +143,201 @@ export function ExamSectionRunner() {
   }, [deadlineUtc])
 
   if (!section) {
-    return <SectionSkeleton />
+    return (
+      <div className="mx-auto w-full max-w-2xl">
+        <SectionSkeleton />
+      </div>
+    )
   }
 
+  const urgent = secondsLeft !== null && secondsLeft < 60
+  const low = secondsLeft !== null && secondsLeft < 300
+
   return (
-    <div className="flex flex-col gap-6" data-testid="exam-section-runner">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-5" data-testid="exam-section-runner">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{sectionLabels[section.section as SectionType]}</h1>
+        <h1 className="text-xl font-semibold tracking-tight">
+          {sectionLabels[section.section as SectionType]}
+        </h1>
         {secondsLeft !== null && (
-          <span className="font-mono text-lg tabular-nums" data-testid="section-timer">
+          <span
+            className={cn(
+              'flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-sm tabular-nums',
+              urgent
+                ? 'border-destructive/30 bg-destructive/10 text-destructive'
+                : low
+                  ? 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                  : 'border-border text-muted-foreground',
+            )}
+            data-testid="section-timer"
+          >
             {formatTime(secondsLeft)}
           </span>
         )}
       </div>
 
-      <div className="flex flex-col gap-6">
-        {section.questions?.map((question) => (
-          <div key={question.id} className="flex flex-col gap-2 rounded-md border p-4">
-            <p className="font-medium">{question.content}</p>
-            {isOrderedQuestion(question.type) ? (
-              <OrderedAnswerInput attemptId={attemptId} question={question} />
-            ) : (
-              <McqAnswerInput attemptId={attemptId} question={question} />
-            )}
+      {/* Keyed by section so navigating to a new section (or the section
+          identity otherwise changing) remounts this with fresh state,
+          instead of reaching for an effect to reset it by hand. */}
+      <SectionQuestions
+        key={section.section}
+        section={section}
+        attemptId={attemptId}
+        onSubmit={submitSection}
+        isSubmitPending={sectionSubmitMutation.isPending}
+      />
+    </div>
+  )
+}
+
+function SectionQuestions({
+  section,
+  attemptId,
+  onSubmit,
+  isSubmitPending,
+}: {
+  section: ExamSection
+  attemptId: string
+  onSubmit: () => void
+  isSubmitPending: boolean
+}) {
+  const questions = section.questions ?? []
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [answeredIds, setAnsweredIds] = useState<Set<string>>(
+    () => new Set(questions.filter(questionAnsweredOnLoad).map((q) => q.id!)),
+  )
+  const [visitedIds, setVisitedIds] = useState<Set<string>>(
+    () => new Set(questions[0] ? [questions[0].id!] : []),
+  )
+
+  function markAnswered(id: string) {
+    setAnsweredIds((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
+  }
+
+  function goTo(index: number) {
+    const target = questions[index]
+    if (target) {
+      setVisitedIds((prev) => (prev.has(target.id!) ? prev : new Set(prev).add(target.id!)))
+    }
+    setCurrentIndex(index)
+  }
+
+  const question = questions[currentIndex]
+  const isLast = currentIndex === questions.length - 1
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground" data-testid="question-progress-label">
+            Вопрос {currentIndex + 1} из {questions.length}
+          </span>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-emerald-600" />
+              Отвечено
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full border border-amber-500 border-dashed" />
+              Пропущено
+            </span>
           </div>
-        ))}
+        </div>
+        <div className="flex flex-wrap gap-1.5" data-testid="question-progress-dots">
+          {questions.map((q, index) => {
+            const answered = answeredIds.has(q.id!)
+            const isCurrent = index === currentIndex
+            const skipped = !answered && !isCurrent && visitedIds.has(q.id!)
+            const label = isCurrent
+              ? 'Текущий вопрос'
+              : answered
+                ? 'Отвечено'
+                : skipped
+                  ? 'Пропущено'
+                  : 'Ещё не открывали'
+            return (
+              <button
+                key={q.id}
+                type="button"
+                onClick={() => goTo(index)}
+                title={`Вопрос ${index + 1}: ${label}`}
+                data-testid={`question-progress-dot-${index}`}
+                className={cn(
+                  'flex size-7 items-center justify-center rounded-full border text-xs font-medium transition-colors',
+                  answered && 'border-emerald-600 bg-emerald-600 text-white',
+                  !answered &&
+                    !skipped &&
+                    'border-border text-muted-foreground hover:border-foreground/30',
+                  skipped && 'border-amber-500 border-dashed text-amber-600 dark:text-amber-400',
+                  isCurrent && 'ring-2 ring-ring ring-offset-2 ring-offset-background',
+                )}
+              >
+                {index + 1}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      <SubmitSectionButton onConfirm={submitSection} isPending={sectionSubmitMutation.isPending} />
+      {question && (
+        <div
+          key={question.id}
+          className="flex flex-col gap-4 rounded-xl bg-card p-5 ring-1 ring-foreground/10"
+          data-testid="current-question"
+        >
+          <div className="flex items-center gap-2">
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
+              {currentIndex + 1}
+            </span>
+            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              {questionTypeLabels[question.type!]}
+            </span>
+          </div>
+          <p className="text-base font-medium text-balance">{question.content}</p>
+          {isOpenAnswerQuestion(question.type) ? (
+            <AudioAnswerInput
+              attemptId={attemptId}
+              question={question}
+              onAnswered={() => markAnswered(question.id!)}
+            />
+          ) : isOrderedQuestion(question.type) ? (
+            <OrderedAnswerInput
+              attemptId={attemptId}
+              question={question}
+              onAnswered={() => markAnswered(question.id!)}
+            />
+          ) : (
+            <McqAnswerInput
+              attemptId={attemptId}
+              question={question}
+              onAnswered={() => markAnswered(question.id!)}
+            />
+          )}
+        </div>
+      )}
+
+      <div className="flex items-center justify-between">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={currentIndex === 0}
+          onClick={() => goTo(currentIndex - 1)}
+          data-testid="question-prev-button"
+        >
+          ← Назад
+        </Button>
+        {isLast ? (
+          <SubmitSectionButton onConfirm={onSubmit} isPending={isSubmitPending} />
+        ) : (
+          <Button
+            type="button"
+            onClick={() => goTo(currentIndex + 1)}
+            data-testid="question-next-button"
+          >
+            Далее →
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

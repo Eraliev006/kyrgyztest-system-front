@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
+      '@/assets': path.resolve(import.meta.dirname, 'src/assets'),
       '@/app': path.resolve(import.meta.dirname, 'src/app'),
       '@/pages': path.resolve(import.meta.dirname, 'src/pages'),
       '@/widgets': path.resolve(import.meta.dirname, 'src/widgets'),

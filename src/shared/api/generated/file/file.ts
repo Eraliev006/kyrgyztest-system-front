@@ -15,7 +15,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  PostApiFilesAudioBody
+  PostApiFilesAudioBody,
+  ProblemDetails,
+  UploadAudioResponseDto
 } from '../kyrgyzTestAPI.schemas';
 
 import { apiInstance } from '../../instance';
@@ -25,17 +27,44 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
-export type postApiFilesAudioResponse200 = {
-  data: void
+export type postApiFilesAudioResponse200TextPlain = {
+  data: UploadAudioResponseDto
   status: 200
 }
 
-export type postApiFilesAudioResponseSuccess = (postApiFilesAudioResponse200) & {
+export type postApiFilesAudioResponse200ApplicationJson = {
+  data: UploadAudioResponseDto
+  status: 200
+}
+
+export type postApiFilesAudioResponse200TextJson = {
+  data: UploadAudioResponseDto
+  status: 200
+}
+
+export type postApiFilesAudioResponse400TextPlain = {
+  data: ProblemDetails
+  status: 400
+}
+
+export type postApiFilesAudioResponse400ApplicationJson = {
+  data: ProblemDetails
+  status: 400
+}
+
+export type postApiFilesAudioResponse400TextJson = {
+  data: ProblemDetails
+  status: 400
+}
+
+export type postApiFilesAudioResponseSuccess = (postApiFilesAudioResponse200TextPlain | postApiFilesAudioResponse200ApplicationJson | postApiFilesAudioResponse200TextJson) & {
   headers: Headers;
 };
-;
+export type postApiFilesAudioResponseError = (postApiFilesAudioResponse400TextPlain | postApiFilesAudioResponse400ApplicationJson | postApiFilesAudioResponse400TextJson) & {
+  headers: Headers;
+};
 
-export type postApiFilesAudioResponse = (postApiFilesAudioResponseSuccess)
+export type postApiFilesAudioResponse = (postApiFilesAudioResponseSuccess | postApiFilesAudioResponseError)
 
 export const getPostApiFilesAudioUrl = () => {
 
@@ -64,7 +93,7 @@ if(postApiFilesAudioBody?.file !== undefined) {
 
 
 
-export const getPostApiFilesAudioMutationOptions = <TError = unknown,
+export const getPostApiFilesAudioMutationOptions = <TError = ProblemDetails,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext>, request?: SecondParameter<typeof apiInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext> => {
 
@@ -93,9 +122,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type PostApiFilesAudioMutationResult = NonNullable<Awaited<ReturnType<typeof postApiFilesAudio>>>
     export type PostApiFilesAudioMutationBody = PostApiFilesAudioBody | undefined
-    export type PostApiFilesAudioMutationError = unknown
+    export type PostApiFilesAudioMutationError = ProblemDetails
 
-    export const usePostApiFilesAudio = <TError = unknown,
+    export const usePostApiFilesAudio = <TError = ProblemDetails,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiFilesAudio>>, TError,{data?: PostApiFilesAudioBody}, TContext>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postApiFilesAudio>>,

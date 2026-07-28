@@ -5,9 +5,11 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { usePostApiExamLogin, usePostApiExamStart } from '@/shared/api/generated/exam/exam'
+import { usePutApiCandidatesIdPhoto } from '@/shared/api/generated/candidate/candidate'
 import type { CandidateResponseDto } from '@/shared/api/generated/kyrgyzTestAPI.schemas'
 import { findCurrentSection } from '@/entities/attempt'
-import { setAttemptSession } from '@/shared/lib/attempt-session'
+import { setAttemptSession, setCandidatePhoto } from '@/shared/lib/attempt-session'
+import { capturePhoto } from '@/shared/lib/capture-photo'
 import { ApiError } from '@/shared/api/instance'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
@@ -30,6 +32,7 @@ export function AccessCodeLoginForm() {
 
   const loginMutation = usePostApiExamLogin()
   const startMutation = usePostApiExamStart()
+  const photoMutation = usePutApiCandidatesIdPhoto()
 
   async function onSubmit(values: AccessCodeFormValues) {
     try {
@@ -43,7 +46,13 @@ export function AccessCodeLoginForm() {
       setIsStarting(true)
       const startResult = await startMutation.mutateAsync({ data: { candidateId } })
       const attemptId = startResult.data.attemptId!
-      setAttemptSession(candidateId, attemptId)
+      setAttemptSession(candidateId, attemptId, candidate.fullName)
+
+      void capturePhoto().then((photo) => {
+        if (!photo) return
+        setCandidatePhoto(photo)
+        photoMutation.mutate({ id: candidateId, data: { photo } })
+      })
 
       const current = findCurrentSection(startResult.data.sections ?? [])
       if (!current) {
@@ -62,7 +71,7 @@ export function AccessCodeLoginForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-80 flex-col gap-4"
+      className="flex w-full flex-col gap-4"
       data-testid="access-code-form"
     >
       <div className="flex flex-col gap-1.5">
@@ -70,6 +79,8 @@ export function AccessCodeLoginForm() {
         <Input
           id="accessCode"
           data-testid="access-code-input"
+          className="h-11 text-base tracking-wide"
+          placeholder="20260728-1234"
           {...register('accessCode')}
           autoFocus
         />
@@ -77,7 +88,13 @@ export function AccessCodeLoginForm() {
           <p className="text-sm text-destructive">{errors.accessCode.message}</p>
         )}
       </div>
-      <Button type="submit" disabled={isPending} data-testid="access-code-submit">
+      <Button
+        type="submit"
+        size="lg"
+        className="h-11"
+        disabled={isPending}
+        data-testid="access-code-submit"
+      >
         {isPending ? 'Вход...' : 'Начать тест'}
       </Button>
     </form>

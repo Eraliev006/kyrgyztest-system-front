@@ -1,0 +1,67 @@
+stages:
+  - build
+  - test
+  - smoke
+
+build:
+  stage: build
+  image: node:22-alpine
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+  only:
+    - develop
+    - production
+
+test:
+  stage: test
+  image: node:22-alpine
+  script:
+    - npm ci
+    - npm run lint
+    - npx tsc -b --noEmit
+  only:
+    - develop
+    - production
+
+# Runs the Python/Playwright smoke suite in qa/ against a real backend. There is
+# no deploy stage in this repo yet (no Dockerfile/compose/reverse-proxy config
+# for the frontend), so this job:
+#   - serves the just-built dist/ with `vite preview` for BASE_UI_URL
+#   - points BASE_URL at an already-running backend reachable from the runner
+#     (the self-hosted runner is the same host the backend repo's own CI
+#     deploys to — see kyrgyztest-system/.gitlab-ci.yml)
+#
+# Required project CI/CD variables (Settings > CI/CD > Variables, masked):
+#   BASE_URL              e.g. http://localhost:5080
+#   ADMIN_LOGIN           staff login with SuperAdmin/Examiner access
+#   ADMIN_PASSWORD
+#   EXAM_KIOSK_PASSWORD   matches the backend's ExamSettings__AccessPassword
+#
+# Restricted to `develop`: the suite creates/deletes a real candidate row
+# through the live backend API, which shouldn't run unattended against
+# whatever is deployed on `production`.
+smoke:
+  stage: smoke
+  image: mcr.microsoft.com/playwright/python:v1.49.0-jammy
+  needs:
+    - build
+  variables:
+    BASE_UI_URL: http://localhost:4173
+    HEADLESS: "true"
+  script:
+    - npm ci
+    - npx vite preview --port 4173 --host &
+    - sleep 3
+    - cd qa
+    - pip install -e .
+    - playwright install chromium
+    - pytest -m smoke
+  only:
+    - develop
+  tags:
+    - self-hosted

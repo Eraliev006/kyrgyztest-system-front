@@ -28,6 +28,7 @@ import type {
   ExamLoginDto,
   ExamSectionDto,
   GetApiExamSectionStatusParams,
+  PostApiExamAnswerAudioBody,
   ProblemDetails,
   ResultResponseDto,
   SaveAnswerDto,
@@ -739,6 +740,92 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         TContext
       > => {
       return useMutation(getPostApiExamAnswerMutationOptions(options), queryClient);
+    }
+    export type postApiExamAnswerAudioResponse200 = {
+  data: void
+  status: 200
+}
+
+export type postApiExamAnswerAudioResponseSuccess = (postApiExamAnswerAudioResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postApiExamAnswerAudioResponse = (postApiExamAnswerAudioResponseSuccess)
+
+export const getPostApiExamAnswerAudioUrl = () => {
+
+
+
+
+  return `/api/exam/answer/audio`
+}
+
+export const postApiExamAnswerAudio = async (postApiExamAnswerAudioBody?: PostApiExamAnswerAudioBody, options?: RequestInit): Promise<postApiExamAnswerAudioResponse> => {
+    const formData = new FormData();
+if(postApiExamAnswerAudioBody?.attemptId !== undefined) {
+ formData.append(`attemptId`, postApiExamAnswerAudioBody.attemptId);
+ }
+if(postApiExamAnswerAudioBody?.questionId !== undefined) {
+ formData.append(`questionId`, postApiExamAnswerAudioBody.questionId);
+ }
+if(postApiExamAnswerAudioBody?.file !== undefined) {
+ formData.append(`file`, postApiExamAnswerAudioBody.file);
+ }
+
+  return apiInstance<postApiExamAnswerAudioResponse>(getPostApiExamAnswerAudioUrl(),
+  {
+    ...options,
+    method: 'POST'
+    ,
+    body: formData
+  }
+);}
+
+
+
+
+
+export const getPostApiExamAnswerAudioMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswerAudio>>, TError,{data?: PostApiExamAnswerAudioBody}, TContext>, request?: SecondParameter<typeof apiInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswerAudio>>, TError,{data?: PostApiExamAnswerAudioBody}, TContext> => {
+
+const mutationKey = ['postApiExamAnswerAudio'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiExamAnswerAudio>>, {data?: PostApiExamAnswerAudioBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiExamAnswerAudio(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiExamAnswerAudioMutationResult = NonNullable<Awaited<ReturnType<typeof postApiExamAnswerAudio>>>
+    export type PostApiExamAnswerAudioMutationBody = PostApiExamAnswerAudioBody | undefined
+    export type PostApiExamAnswerAudioMutationError = unknown
+
+    export const usePostApiExamAnswerAudio = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiExamAnswerAudio>>, TError,{data?: PostApiExamAnswerAudioBody}, TContext>, request?: SecondParameter<typeof apiInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postApiExamAnswerAudio>>,
+        TError,
+        {data?: PostApiExamAnswerAudioBody},
+        TContext
+      > => {
+      return useMutation(getPostApiExamAnswerAudioMutationOptions(options), queryClient);
     }
     export type postApiExamSubmitResponse200TextPlain = {
   data: ResultResponseDto

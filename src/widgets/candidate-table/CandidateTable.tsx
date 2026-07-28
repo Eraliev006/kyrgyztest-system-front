@@ -24,7 +24,7 @@ function CandidateStatus({ candidate }: { candidate: Candidate }) {
     )
   }
   return candidate.isAllowed ? (
-    <Badge variant="secondary">Доступ открыт</Badge>
+    <Badge variant="success">Доступ открыт</Badge>
   ) : (
     <Badge variant="outline">Доступ закрыт</Badge>
   )
@@ -55,6 +55,10 @@ export function CandidateTable() {
   return (
     <div className="flex flex-col gap-4">
       <Select
+        items={{
+          [ALL_ORGANIZATIONS]: 'Все организации',
+          ...Object.fromEntries(organizations.map((org) => [org.id!, org.shortName!])),
+        }}
         value={organizationId}
         onValueChange={(value) => {
           setOrganizationId(value as string)
@@ -77,7 +81,6 @@ export function CandidateTable() {
       <Table data-testid="candidates-table">
         <TableHeader>
           <TableRow>
-            <TableHead>Фото</TableHead>
             <TableHead>ФИО</TableHead>
             <TableHead>ИНН</TableHead>
             <TableHead>Организация</TableHead>
@@ -87,25 +90,14 @@ export function CandidateTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && <TableSkeletonRows columns={7} />}
+          {isLoading && <TableSkeletonRows columns={6} />}
           {!isLoading && candidates.length === 0 && (
             <TableRow>
-              <TableCell colSpan={7}>Кандидатов пока нет</TableCell>
+              <TableCell colSpan={6}>Кандидатов пока нет</TableCell>
             </TableRow>
           )}
           {candidates.map((candidate) => (
             <TableRow key={candidate.id} data-testid={`candidate-row-${candidate.id}`}>
-              <TableCell>
-                {candidate.photo ? (
-                  <img
-                    src={candidate.photo}
-                    alt={candidate.fullName ?? ''}
-                    className="size-10 rounded-md object-cover"
-                  />
-                ) : (
-                  <div className="size-10 rounded-md border" />
-                )}
-              </TableCell>
               <TableCell>{candidate.fullName}</TableCell>
               <TableCell>{candidate.inn}</TableCell>
               <TableCell>{organizationName(candidate.organizationId)}</TableCell>
@@ -115,7 +107,7 @@ export function CandidateTable() {
               <TableCell>
                 <CandidateStatus candidate={candidate} />
               </TableCell>
-              <TableCell className="flex justify-end gap-2">
+              <TableCell className="flex items-center justify-end gap-2">
                 <CandidateAccessActions candidate={candidate} />
                 <Button
                   variant="outline"

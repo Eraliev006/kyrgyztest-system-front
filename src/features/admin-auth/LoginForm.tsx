@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { useLocation, useNavigate, type Location } from 'react-router-dom'
 import { toast } from 'sonner'
 import { usePostApiAuthLogin } from '@/shared/api/generated/auth/auth'
-import { useAuth, toLoginResponse } from '@/entities/account'
+import { useAuth, toLoginResponse, UserRole } from '@/entities/account'
 import { ApiError } from '@/shared/api/instance'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
@@ -17,7 +17,7 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>
 
-export function LoginForm() {
+export function LoginForm({ onForgotPassword }: { onForgotPassword: () => void }) {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -30,8 +30,15 @@ export function LoginForm() {
   const mutation = usePostApiAuthLogin({
     mutation: {
       onSuccess: (response) => {
-        login(toLoginResponse(response.data))
-        const from = (location.state as { from?: Location } | null)?.from?.pathname ?? '/admin'
+        const loginResponse = toLoginResponse(response.data)
+        login(loginResponse)
+        const roleHome =
+          loginResponse.role === UserRole.Examiner
+            ? '/examiner'
+            : loginResponse.role === UserRole.Expert
+              ? '/admin/topics'
+              : '/admin'
+        const from = (location.state as { from?: Location } | null)?.from?.pathname ?? roleHome
         navigate(from, { replace: true })
       },
       onError: (error) => {
@@ -73,6 +80,16 @@ export function LoginForm() {
       </div>
       <Button type="submit" disabled={mutation.isPending} data-testid="login-submit">
         {mutation.isPending ? 'Вход...' : 'Войти'}
+      </Button>
+      <Button
+        type="button"
+        variant="link"
+        size="sm"
+        className="h-auto self-center p-0"
+        onClick={onForgotPassword}
+        data-testid="login-forgot-password"
+      >
+        Забыли пароль?
       </Button>
     </form>
   )

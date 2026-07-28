@@ -38,7 +38,7 @@ export function CandidateAccessActions({ candidate }: { candidate: Candidate }) 
   const blocked = isBlocked(candidate)
 
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
       {blocked ? (
         <Button
           variant="outline"
@@ -49,35 +49,39 @@ export function CandidateAccessActions({ candidate }: { candidate: Candidate }) 
         >
           Разблокировать
         </Button>
-      ) : candidate.isAllowed ? (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => denyMutation.mutate({ id: candidate.id! })}
-          disabled={denyMutation.isPending}
-          data-testid={`candidate-${candidate.id}-deny`}
-        >
-          Закрыть доступ
-        </Button>
       ) : (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => allowMutation.mutate({ id: candidate.id! })}
-          disabled={allowMutation.isPending}
-          data-testid={`candidate-${candidate.id}-allow`}
-        >
-          Открыть доступ
-        </Button>
+        <>
+          {candidate.isAllowed ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => denyMutation.mutate({ id: candidate.id! })}
+              disabled={denyMutation.isPending}
+              data-testid={`candidate-${candidate.id}-deny`}
+            >
+              Закрыть доступ
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => allowMutation.mutate({ id: candidate.id! })}
+              disabled={allowMutation.isPending}
+              data-testid={`candidate-${candidate.id}-allow`}
+            >
+              Открыть доступ
+            </Button>
+          )}
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setBlockDialogOpen(true)}
+            data-testid={`candidate-${candidate.id}-block`}
+          >
+            Заблокировать
+          </Button>
+        </>
       )}
-      <Button
-        variant="destructive"
-        size="sm"
-        onClick={() => setBlockDialogOpen(true)}
-        data-testid={`candidate-${candidate.id}-block`}
-      >
-        Заблокировать
-      </Button>
       <BlockCandidateDialog
         open={blockDialogOpen}
         onOpenChange={setBlockDialogOpen}

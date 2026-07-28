@@ -6,4 +6,4 @@ export type {
   SubmitSectionResult,
   ActiveAttempt,
 } from './model'
-export { isOrderedQuestion, findCurrentSection } from './model'
+export { isOrderedQuestion, isOpenAnswerQuestion, findCurrentSection } from './model'

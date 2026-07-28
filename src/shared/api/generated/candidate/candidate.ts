@@ -383,17 +383,44 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getPostApiCandidatesMutationOptions(options), queryClient);
     }
-    export type getApiCandidatesSearchResponse200 = {
-  data: void
+    export type getApiCandidatesSearchResponse200TextPlain = {
+  data: CandidateResponseDto
   status: 200
 }
 
-export type getApiCandidatesSearchResponseSuccess = (getApiCandidatesSearchResponse200) & {
+export type getApiCandidatesSearchResponse200ApplicationJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type getApiCandidatesSearchResponse200TextJson = {
+  data: CandidateResponseDto
+  status: 200
+}
+
+export type getApiCandidatesSearchResponse404TextPlain = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiCandidatesSearchResponse404ApplicationJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiCandidatesSearchResponse404TextJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiCandidatesSearchResponseSuccess = (getApiCandidatesSearchResponse200TextPlain | getApiCandidatesSearchResponse200ApplicationJson | getApiCandidatesSearchResponse200TextJson) & {
   headers: Headers;
 };
-;
+export type getApiCandidatesSearchResponseError = (getApiCandidatesSearchResponse404TextPlain | getApiCandidatesSearchResponse404ApplicationJson | getApiCandidatesSearchResponse404TextJson) & {
+  headers: Headers;
+};
 
-export type getApiCandidatesSearchResponse = (getApiCandidatesSearchResponseSuccess)
+export type getApiCandidatesSearchResponse = (getApiCandidatesSearchResponseSuccess | getApiCandidatesSearchResponseError)
 
 export const getGetApiCandidatesSearchUrl = (params?: GetApiCandidatesSearchParams,) => {
   const normalizedParams = new URLSearchParams();
@@ -432,7 +459,7 @@ export const getGetApiCandidatesSearchQueryKey = (params?: GetApiCandidatesSearc
     }
 
 
-export const getGetApiCandidatesSearchQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
+export const getGetApiCandidatesSearchQueryOptions = <TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = ProblemDetails>(params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -451,10 +478,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetApiCandidatesSearchQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCandidatesSearch>>>
-export type GetApiCandidatesSearchQueryError = unknown
+export type GetApiCandidatesSearchQueryError = ProblemDetails
 
 
-export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
+export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = ProblemDetails>(
  params: undefined |  GetApiCandidatesSearchParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiCandidatesSearch>>,
@@ -464,7 +491,7 @@ export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getA
       >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
+export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = ProblemDetails>(
  params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getApiCandidatesSearch>>,
@@ -474,12 +501,12 @@ export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getA
       >, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
+export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = ProblemDetails>(
  params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = unknown>(
+export function useGetApiCandidatesSearch<TData = Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError = ProblemDetails>(
  params?: GetApiCandidatesSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCandidatesSearch>>, TError, TData>>, request?: SecondParameter<typeof apiInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
