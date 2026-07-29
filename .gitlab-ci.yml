@@ -6,6 +6,12 @@ stages:
 build:
   stage: build
   image: node:22-alpine
+  variables:
+    # Vite bakes this into the bundle at build time. Points at the office
+    # dev stand so the `smoke` job (self-hosted runner on that same box)
+    # can actually reach the backend — unrelated to Vercel's own build,
+    # which sets its own VITE_API_BASE_URL for production.
+    VITE_API_BASE_URL: http://192.168.5.112:5000
   script:
     - npm ci
     - npm run build
