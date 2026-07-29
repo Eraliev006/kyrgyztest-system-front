@@ -10,6 +10,7 @@ import {
   Activity,
   UserCog,
   History,
+  KeyRound,
 } from 'lucide-react'
 import { Sidebar, type SidebarLink } from '@/widgets/sidebar/Sidebar'
 import { Header } from '@/widgets/header/Header'
@@ -87,6 +88,13 @@ const links: SidebarLink[] = [
     label: 'Аудит',
     icon: History,
     testId: 'nav-audit',
+    roles: [SuperAdmin, Director],
+  },
+  {
+    to: '/admin/exam-settings',
+    label: 'Настройки экзамена',
+    icon: KeyRound,
+    testId: 'nav-exam-settings',
     roles: [SuperAdmin, Director],
   },
 ]

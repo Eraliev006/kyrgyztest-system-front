@@ -226,6 +226,14 @@ export interface CreateUserDto {
   role?: UserRole;
 }
 
+export interface ExamAccessSettingsDto {
+  /** @nullable */
+  accessPassword?: string | null;
+  updatedAt?: string;
+  /** @nullable */
+  updatedByFullName?: string | null;
+}
+
 export interface ExamAnswerOptionDto {
   id?: string;
   /** @nullable */
@@ -550,6 +558,11 @@ export interface UpdateCandidateDto {
   inn?: string | null;
   /** @nullable */
   organizationId?: string | null;
+}
+
+export interface UpdateExamAccessPasswordDto {
+  /** @nullable */
+  newPassword?: string | null;
 }
 
 export interface UploadAudioResponseDto {
