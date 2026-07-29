@@ -22,9 +22,13 @@ def playwright_instance():
 
 @pytest.fixture(scope='session')
 def browser(playwright_instance):
+    # CI runs this as root inside Docker, where Chromium's sandbox needs
+    # privileges the container doesn't grant — without --no-sandbox the
+    # browser launches but every navigation silently produces a blank page.
     browser = playwright_instance.chromium.launch(
         headless=settings.headless,
         slow_mo=settings.slow_mo,
+        args=['--no-sandbox', '--disable-dev-shm-usage'],
     )
     yield browser
     browser.close()
