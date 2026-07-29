@@ -47,7 +47,7 @@ test:
 # whatever is deployed on `production`.
 smoke:
   stage: smoke
-  image: mcr.microsoft.com/playwright/python:v1.49.0-jammy
+  image: mcr.microsoft.com/playwright/python:v1.49.0-noble
   needs:
     - build
   variables:
