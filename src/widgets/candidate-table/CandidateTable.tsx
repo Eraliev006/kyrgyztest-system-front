@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useGetApiCandidates } from '@/shared/api/generated/candidate/candidate'
 import { useGetApiOrganizations } from '@/shared/api/generated/organization/organization'
+import { useAuth, UserRole } from '@/entities/account'
 import { isBlocked, type Candidate } from '@/entities/candidate'
 import { CandidateForm } from '@/features/candidate-crud/CandidateForm'
 import { DeleteCandidateDialog } from '@/features/candidate-crud/DeleteCandidateDialog'
@@ -31,6 +32,8 @@ function CandidateStatus({ candidate }: { candidate: Candidate }) {
 }
 
 export function CandidateTable() {
+  const { account } = useAuth()
+  const canDelete = account?.role === UserRole.SuperAdmin || account?.role === UserRole.Director
   const [organizationId, setOrganizationId] = useState<string>(ALL_ORGANIZATIONS)
   const [page, setPage] = useState(1)
   const [editing, setEditing] = useState<Candidate | undefined>(undefined)
@@ -117,14 +120,16 @@ export function CandidateTable() {
                 >
                   Изменить
                 </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => setDeleting(candidate)}
-                  data-testid={`candidate-row-${candidate.id}-delete`}
-                >
-                  Удалить
-                </Button>
+                {canDelete && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setDeleting(candidate)}
+                    data-testid={`candidate-row-${candidate.id}-delete`}
+                  >
+                    Удалить
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
