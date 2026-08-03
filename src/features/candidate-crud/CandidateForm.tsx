@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -7,11 +7,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import {
   usePostApiCandidates,
   usePutApiCandidatesId,
+  usePutApiCandidatesIdPhoto,
   getGetApiCandidatesQueryKey,
 } from '@/shared/api/generated/candidate/candidate'
 import { useGetApiOrganizations } from '@/shared/api/generated/organization/organization'
 import type { Candidate } from '@/entities/candidate'
 import { ApiError } from '@/shared/api/instance'
+import { capturePhoto } from '@/shared/lib/capture-photo'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
@@ -22,6 +24,7 @@ const candidateSchema = z.object({
   fullName: z.string().min(1, 'Обязательное поле'),
   inn: z.string().length(14, 'ИНН должен содержать 14 символов'),
   organizationId: z.string().optional(),
+  photo: z.string().nullable().optional(),
 })
 
 type CandidateFormValues = z.infer<typeof candidateSchema>
@@ -37,14 +40,19 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
   const queryClient = useQueryClient()
   const { data: orgsResponse } = useGetApiOrganizations()
   const organizations = orgsResponse?.data ?? []
+  const [capturing, setCapturing] = useState(false)
 
   const {
     register,
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<CandidateFormValues>({ resolver: zodResolver(candidateSchema) })
+
+  const photo = watch('photo')
 
   useEffect(() => {
     if (open) {
@@ -52,6 +60,7 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
         fullName: candidate?.fullName ?? '',
         inn: candidate?.inn ?? '',
         organizationId: candidate?.organizationId ?? undefined,
+        photo: candidate?.photo ?? null,
       })
     }
   }, [open, candidate, reset])
@@ -60,9 +69,34 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
     queryClient.invalidateQueries({ queryKey: getGetApiCandidatesQueryKey() })
   }
 
+  const photoMutation = usePutApiCandidatesIdPhoto({
+    mutation: {
+      onError: (error) =>
+        toast.error(error instanceof ApiError ? error.message : 'Не удалось сохранить фото'),
+    },
+  })
+
+  async function handleCapture() {
+    setCapturing(true)
+    const result = await capturePhoto()
+    setCapturing(false)
+    if (!result) {
+      toast.error('Не удалось получить доступ к камере')
+      return
+    }
+    setValue('photo', result)
+    if (candidate?.id) {
+      photoMutation.mutate({ id: candidate.id, data: { photo: result } })
+    }
+  }
+
   const createMutation = usePostApiCandidates({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        const newId = response.data.id
+        if (photo && newId) {
+          photoMutation.mutate({ id: newId, data: { photo } })
+        }
         toast.success('Кандидат создан')
         onOpenChange(false)
       },
@@ -85,7 +119,11 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
   const isPending = createMutation.isPending || updateMutation.isPending
 
   function onSubmit(values: CandidateFormValues) {
-    const data = { ...values, organizationId: values.organizationId ?? null }
+    const data = {
+      fullName: values.fullName,
+      inn: values.inn,
+      organizationId: values.organizationId ?? null,
+    }
     if (isEditing) {
       updateMutation.mutate({ id: candidate.id!, data })
     } else {
@@ -104,6 +142,31 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
           className="flex flex-col gap-4"
           data-testid="candidate-form-body"
         >
+          <div className="flex flex-col gap-1.5">
+            <Label>Фото</Label>
+            <div className="flex items-center gap-3">
+              {photo ? (
+                <img
+                  src={photo}
+                  alt=""
+                  className="size-16 rounded-full object-cover ring-1 ring-border"
+                />
+              ) : (
+                <span className="flex size-16 items-center justify-center rounded-full bg-muted text-xs text-muted-foreground">
+                  Нет фото
+                </span>
+              )}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCapture}
+                disabled={capturing}
+                data-testid="candidate-photo-capture"
+              >
+                {capturing ? 'Съёмка…' : photo ? 'Переснять' : 'Сфотографировать'}
+              </Button>
+            </div>
+          </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="fullName">ФИО</Label>
             <Input id="fullName" data-testid="candidate-fullName-input" {...register('fullName')} />
