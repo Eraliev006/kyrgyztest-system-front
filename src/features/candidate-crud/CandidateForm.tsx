@@ -13,12 +13,12 @@ import {
 import { useGetApiOrganizations } from '@/shared/api/generated/organization/organization'
 import type { Candidate } from '@/entities/candidate'
 import { ApiError } from '@/shared/api/instance'
-import { capturePhoto } from '@/shared/lib/capture-photo'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select'
+import { PhotoCaptureDialog } from './PhotoCaptureDialog'
 
 const candidateSchema = z.object({
   fullName: z.string().min(1, 'Обязательное поле'),
@@ -40,7 +40,7 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
   const queryClient = useQueryClient()
   const { data: orgsResponse } = useGetApiOrganizations()
   const organizations = orgsResponse?.data ?? []
-  const [capturing, setCapturing] = useState(false)
+  const [cameraOpen, setCameraOpen] = useState(false)
 
   const {
     register,
@@ -76,14 +76,7 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
     },
   })
 
-  async function handleCapture() {
-    setCapturing(true)
-    const result = await capturePhoto()
-    setCapturing(false)
-    if (!result) {
-      toast.error('Не удалось получить доступ к камере')
-      return
-    }
+  function handlePhotoCaptured(result: string) {
     setValue('photo', result)
     if (candidate?.id) {
       photoMutation.mutate({ id: candidate.id, data: { photo: result } })
@@ -159,11 +152,10 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
               <Button
                 type="button"
                 variant="outline"
-                onClick={handleCapture}
-                disabled={capturing}
+                onClick={() => setCameraOpen(true)}
                 data-testid="candidate-photo-capture"
               >
-                {capturing ? 'Съёмка…' : photo ? 'Переснять' : 'Сфотографировать'}
+                {photo ? 'Переснять' : 'Сфотографировать'}
               </Button>
             </div>
           </div>
@@ -211,6 +203,11 @@ export function CandidateForm({ open, onOpenChange, candidate }: CandidateFormPr
           </DialogFooter>
         </form>
       </DialogContent>
+      <PhotoCaptureDialog
+        open={cameraOpen}
+        onOpenChange={setCameraOpen}
+        onCapture={handlePhotoCaptured}
+      />
     </Dialog>
   )
 }
