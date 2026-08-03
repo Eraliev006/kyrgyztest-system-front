@@ -5,10 +5,15 @@ import {
   useGetApiResults,
 } from '@/shared/api/generated/results/results'
 import { useGetApiOrganizations } from '@/shared/api/generated/organization/organization'
-import type { CandidateResponseDto } from '@/shared/api/generated/kyrgyzTestAPI.schemas'
+import {
+  SectionType,
+  type CandidateResponseDto,
+} from '@/shared/api/generated/kyrgyzTestAPI.schemas'
 import { languageLevelLabels } from '@/shared/constants/question-labels'
+import { sectionLabels } from '@/shared/constants/section-labels'
 import { ApiError } from '@/shared/api/instance'
 import { Button } from '@/shared/ui/button'
+import { DatePicker } from '@/shared/ui/date-picker'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { Badge } from '@/shared/ui/badge'
@@ -18,11 +23,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { TableSkeletonRows } from '@/shared/ui/table-skeleton'
 
 const sectionFields = [
-  { key: 'grammarScore', label: 'Грамматика' },
-  { key: 'listeningScore', label: 'Аудирование' },
-  { key: 'readingScore', label: 'Чтение' },
-  { key: 'writingScore', label: 'Письмо' },
-  { key: 'speakingScore', label: 'Говорение' },
+  { key: 'grammarScore', label: sectionLabels[SectionType.Grammar] },
+  { key: 'listeningScore', label: sectionLabels[SectionType.Listening] },
+  { key: 'readingScore', label: sectionLabels[SectionType.Reading] },
+  { key: 'writingScore', label: sectionLabels[SectionType.Writing] },
+  { key: 'speakingScore', label: sectionLabels[SectionType.Speaking] },
 ] as const
 
 const ALL_ORGANIZATIONS = 'all'
@@ -232,21 +237,19 @@ export default function ResultsPage() {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="results-filter-date-from">Дата с</Label>
-            <Input
+            <DatePicker
               id="results-filter-date-from"
-              type="date"
               value={filterDateFrom}
-              onChange={(e) => setFilterDateFrom(e.target.value)}
+              onChange={setFilterDateFrom}
               data-testid="results-filter-date-from"
             />
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="results-filter-date-to">Дата по</Label>
-            <Input
+            <DatePicker
               id="results-filter-date-to"
-              type="date"
               value={filterDateTo}
-              onChange={(e) => setFilterDateTo(e.target.value)}
+              onChange={setFilterDateTo}
               data-testid="results-filter-date-to"
             />
           </div>

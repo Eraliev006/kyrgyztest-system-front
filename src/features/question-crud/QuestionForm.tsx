@@ -164,7 +164,7 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
   const isEditing = !!question
   const queryClient = useQueryClient()
   const { data: topicsResponse } = useGetApiTopics()
-  const topics = topicsResponse?.data ?? []
+  const allTopics = topicsResponse?.data ?? []
 
   const {
     register,
@@ -194,6 +194,7 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
   const section = watch('section')
   const correctIndex = watch('correctIndex')
   const ordered = isOrderedType(type)
+  const topics = allTopics.filter((topic) => topic.sectionType === section)
   const mediaType = sectionMediaType(section)
   const allowedTypes = sectionAllowedTypes[section]
   const typeOptions = allowedTypes.includes(type) ? allowedTypes : [...allowedTypes, type]
@@ -336,6 +337,7 @@ export function QuestionForm({ open, onOpenChange, question }: QuestionFormProps
                         setValue('type', allowed[0])
                         setValue('correctIndex', null)
                       }
+                      setValue('topicId', NO_TOPIC)
                     }}
                   >
                     <SelectTrigger className="w-full">

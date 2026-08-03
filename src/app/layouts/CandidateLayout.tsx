@@ -35,19 +35,22 @@ function CandidateIdentity() {
   if (!name) return null
 
   return (
-    <div className="flex items-center gap-2" data-testid="candidate-identity">
+    <div
+      className="fixed top-20 right-4 z-40 flex w-32 flex-col items-center gap-1.5 rounded-lg border border-border bg-card p-2 shadow-lg"
+      data-testid="candidate-identity"
+    >
       {photo ? (
         <img
           src={photo}
           alt={name}
-          className="size-8 rounded-full object-cover ring-1 ring-border"
+          className="aspect-square w-full rounded-md object-cover ring-1 ring-border"
         />
       ) : (
-        <span className="flex size-8 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
+        <span className="flex aspect-square w-full items-center justify-center rounded-md bg-muted text-2xl font-medium text-muted-foreground">
           {initials(name)}
         </span>
       )}
-      <span className="text-sm font-medium">{name}</span>
+      <span className="text-center text-xs leading-tight font-medium break-words">{name}</span>
     </div>
   )
 }
