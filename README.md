@@ -47,6 +47,26 @@ by default (update that URL if the backend's `API_PORT` changes).
   `/exam/start` is present client-side; it's a routing signal, not a token
   sent to the backend.
 
+## CI/CD и деплой
+
+Свой self-hosted GitLab runner (executor `docker`) на офисном сервере,
+отдельный от бэкендового. Ветки — `develop` и `production`, как в бэкенде
+(`kyrgyztest-system`).
+
+| Stage | Когда               | Что делает                                                                        |
+| ----- | ------------------- | --------------------------------------------------------------------------------- |
+| build | develop, production | `npm ci && npm run build` (`VITE_API_BASE_URL` задаётся в CI/CD-переменных job'а) |
+| test  | develop, production | `npm run lint && npx tsc -b --noEmit`                                             |
+| smoke | **только develop**  | Playwright-тесты (`qa/`) против собранного `dist/` и живого бэкенда               |
+
+Деплой-стадии в этом репозитории нет — сборка не публикуется никуда
+автоматически.
+
+⚠️ Публичная демо-ссылка (ngrok на офисном сервере) обновляется вручную:
+локальная сборка (`VITE_API_BASE_URL` = адрес демо) → архив → scp на
+сервер → распаковка в `/var/www/kyrgyztest-front` (отдаётся Caddy). Пуш
+в `develop` эту статику не трогает.
+
 ## FSD layering
 
 Import direction is enforced by ESLint (`boundaries/dependencies`), not just
